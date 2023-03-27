@@ -7,26 +7,6 @@
   height: calc(80vh - 165px);
 }
 
-.flex {
-  display: flex;
-}
-
-.w-full {
-  width: 100%;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.mt-5 {
-  margin-top: 1.25rem;
-}
-
-.justify-end {
-  justify-content: flex-end;
-}
-
 .output-terminal-bg {
   background-color: #303841;
 }
@@ -35,46 +15,6 @@
   height: 10vh;
 }
 
-.overflow-auto {
-  overflow: auto;
-}
-
 .padding-top-left-1 {
   padding: 1rem 0rem 0rem 1rem;
-}
-
-.text-white {
-  color: white;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
-.w-9 {
-  width: 2.25rem;
-}
-
-.h-9 {
-  height: 2.25rem;
-}
-
-.p-4 {
-  padding: 1rem;
-}
-
-.cursor-pointer {
-  cursor: pointer;
 }
