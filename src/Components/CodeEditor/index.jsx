@@ -11,7 +11,7 @@ const CodeEditor = ({
   value,
   onChange,
   editable,
-  runCode
+  runCode,
 }) => {
   const handleIndentTab = (cm) => {
     const spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
@@ -25,16 +25,16 @@ const CodeEditor = ({
         run: () => {
           if (editable) runCode();
           return true;
-        }
+        },
       },
-      ...defaultKeymap
+      ...defaultKeymap,
     ]),
     keymap.of([handleIndentTab]),
     mapLanguages(selectedLanguage)(),
-    EditorView.lineWrapping
+    EditorView.lineWrapping,
   ];
 
-  const editorHeight = "calc(100vh - 160px)";
+  const editorHeight = "calc(80vh - 165px)";
 
   return (
     <>

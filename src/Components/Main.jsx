@@ -4,7 +4,7 @@ import { assoc } from "ramda";
 
 import {
   useCreateSubmissionsApi,
-  useGetSubmissionsApi
+  useGetSubmissionsApi,
 } from "../Hooks/useSubmissionsApi";
 import CodeEditor from "./CodeEditor";
 import CustomInput from "./CustomInput";
@@ -16,6 +16,7 @@ import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
 import { useCreateCompletionApi } from "../Hooks/useRefactorApi";
+import Header from "./Header";
 
 const Main = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
@@ -49,7 +50,7 @@ const Main = () => {
       const { data: submissionData } = await runCode({
         source_code: encodeString(value),
         language_id: selectedLanguage.value,
-        stdin: encodeString(input || "")
+        stdin: encodeString(input || ""),
       });
 
       const { data: outputData } = await getOutput(submissionData?.token);
@@ -75,7 +76,7 @@ const Main = () => {
 
       const { data: chatGptOutput } = await getRefactoredCode({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: `Refactor code ${value}` }]
+        messages: [{ role: "user", content: `Refactor code ${value}` }],
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
@@ -93,6 +94,7 @@ const Main = () => {
 
   return (
     <div className="flex flex-col w-full">
+      <Header />
       <LanguageSelector
         selectedLanguage={selectedLanguage}
         setSelectedLanguage={setSelectedLanguage}
