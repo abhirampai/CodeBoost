@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { assoc } from "ramda";
 
 import {
   useCreateSubmissionsApi,
-  useGetSubmissionsApi
+  useGetSubmissionsApi,
 } from "../Hooks/useSubmissionsApi";
 import CodeEditor from "./CodeEditor";
 import CustomInput from "./CustomInput";
@@ -16,8 +16,12 @@ import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
 import { useCreateCompletionApi } from "../Hooks/useRefactorApi";
+import Header from "./Header";
+import CodeActions from "./CodeActions";
 
 const Main = () => {
+  const outputRef = useRef(null);
+
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
   const [input, setInput] = useState();
@@ -31,6 +35,12 @@ const Main = () => {
   useEffect(() => {
     setValue(selectedLanguage?.stub);
   }, [selectedLanguage]);
+
+  useEffect(() => {
+    if (output?.data) {
+      outputRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [output]);
 
   const clearInput = () => {
     setInput("");
@@ -49,7 +59,7 @@ const Main = () => {
       const { data: submissionData } = await runCode({
         source_code: encodeString(value),
         language_id: selectedLanguage.value,
-        stdin: encodeString(input || "")
+        stdin: encodeString(input || ""),
       });
 
       const { data: outputData } = await getOutput(submissionData?.token);
@@ -75,7 +85,7 @@ const Main = () => {
 
       const { data: chatGptOutput } = await getRefactoredCode({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: `Refactor code ${value}` }]
+        messages: [{ role: "user", content: `Refactor code ${value}` }],
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
@@ -92,11 +102,19 @@ const Main = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
-      <LanguageSelector
-        selectedLanguage={selectedLanguage}
-        setSelectedLanguage={setSelectedLanguage}
-      />
+    <div className="flex flex-col p-4">
+      <Header />
+      <div className="md:flex md:w-full mt-4 justify-between items-center">
+        <LanguageSelector
+          selectedLanguage={selectedLanguage}
+          setSelectedLanguage={setSelectedLanguage}
+        />
+        <CodeActions
+          refactorCode={refactorCode}
+          runEditorCode={runEditorCode}
+          isLoading={isLoading}
+        />
+      </div>
       <div className="editor-height mt-5">
         <CodeEditor
           selectedLanguage={selectedLanguage?.title.toLowerCase()}
@@ -106,33 +124,18 @@ const Main = () => {
           runCode={runEditorCode}
         />
       </div>
-      <div className="flex mt-5 justify-end">
-        <input
-          value="Run Code"
-          type="button"
-          onClick={runEditorCode}
-          disabled={isLoading}
-        />
-        <input
-          value="Refactor Code"
-          type="button"
-          className="ml-2"
-          onClick={refactorCode}
-          disabled={isLoading}
-        />
-      </div>
       <div className="flex flex-col mt-5">
         <CustomInputHeader clearInput={clearInput} />
         <CustomInput input={input} setInput={handleCustomInputChange} />
       </div>
       {output.data && (
         <>
-          <div className="flex flex-col mt-5">
+          <div className="flex flex-col py-4">
             <OutputTerminalHeader
               status={output?.status}
               clearOutput={clearOutput}
             />
-            <OutputTerminal output={output?.data} />
+            <OutputTerminal output={output?.data} outputRef={outputRef} />
           </div>
         </>
       )}
