@@ -17,6 +17,10 @@ CodeBoost is a code runner that allows you to refactor and run your code in one 
 - Ruby
 - JavaScript
 
+# APIs
+- Judge0CE
+- ChatGPT
+
 # Contributing
 If you want to contribute to this project, feel free to open an issue or submit a pull request on GitHub.
 You can also contribute by forking or creating a branch from [codesandbox](https://codesandbox.io/s/github/abhirampai/CodeBoost)
