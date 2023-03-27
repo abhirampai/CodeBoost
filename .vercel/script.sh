@@ -8,7 +8,7 @@ if [[ "$VERCEL_ENV" == "production" ]] ; then
   exit 1;
 
 else
-  # Don't build
+  # Don't build any other commits
   echo "🛑 - Build cancelled"
   exit 0;
 fi
