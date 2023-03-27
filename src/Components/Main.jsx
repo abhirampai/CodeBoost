@@ -95,9 +95,7 @@ const Main = () => {
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
-      console.log(refactoredCode)
-      console.log(value.replace(selectedValue, refactoredCode))
-      setValue(value.replace(selectedValue, refactoredCode));
+      setValue((prevValue) => prevValue.replace(selectedValue, refactoredCode));
     } catch (err) {
       console.log(err);
     } finally {
