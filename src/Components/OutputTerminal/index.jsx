@@ -1,7 +1,10 @@
-const OutputTerminal = ({ output }) => {
+const OutputTerminal = ({ output, outputRef }) => {
   return (
-    <div className="output-terminal-bg output-terminal-height overflow-auto flex flex-col mt-2">
-      <pre className="padding-top-left-1 text-white">{output}</pre>
+    <div
+      ref={outputRef}
+      className="block px-1 w-full h-36 text-sm bg-gray-800 text-white border focus:ring-0 border-gray-400 mt-2"
+    >
+      {output}
     </div>
   );
 };
