@@ -4,7 +4,7 @@
 }
 
 .editor-height {
-  height: calc(100vh - 160px);
+  height: calc(80vh - 165px);
 }
 
 .flex {
@@ -61,4 +61,20 @@
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.w-9 {
+  width: 2.25rem;
+}
+
+.h-9 {
+  height: 2.25rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
