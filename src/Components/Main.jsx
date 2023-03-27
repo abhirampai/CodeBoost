@@ -21,6 +21,7 @@ import CodeActions from "./CodeActions";
 
 const Main = () => {
   const outputRef = useRef(null);
+  const editorRef = useRef(null);
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
@@ -82,14 +83,19 @@ const Main = () => {
   const refactorCode = async () => {
     try {
       setIsLoading(true);
+      const cursorSelection = editorRef.current.view.state.selection.main;
+      const startRange = cursorSelection.from;
+      const endRange = cursorSelection.to;
+      const selectedValue =
+        startRange !== endRange ? value.substring(startRange, endRange) : value;
 
       const { data: chatGptOutput } = await getRefactoredCode({
         model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: `Refactor code ${value}` }],
+        messages: [{ role: "user", content: `Refactor code snippet ${selectedValue}` }],
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
-      setValue(refactoredCode);
+      setValue((prevValue) => prevValue.replace(selectedValue, refactoredCode));
     } catch (err) {
       console.log(err);
     } finally {
@@ -117,6 +123,7 @@ const Main = () => {
       </div>
       <div className="editor-height mt-5">
         <CodeEditor
+          editorRef={editorRef}
           selectedLanguage={selectedLanguage?.title.toLowerCase()}
           value={value}
           onChange={setValue}

@@ -7,6 +7,7 @@ import { EditorView } from "@codemirror/view";
 import { mapLanguages } from "./utils";
 
 const CodeEditor = ({
+  editorRef,
   selectedLanguage,
   value,
   onChange,
@@ -39,6 +40,7 @@ const CodeEditor = ({
   return (
     <>
       <CodeMirror
+        ref={editorRef}
         value={value}
         extensions={extensions}
         theme={sublime}
