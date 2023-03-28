@@ -1,6 +1,10 @@
 # CodeBoost
-<img src="https://raw.githubusercontent.com/abhirampai/CodeBoost/main/public/favicon.ico"><br>
+<img src="https://raw.githubusercontent.com/abhirampai/CodeBoost/main/public/favicon.ico">
 CodeBoost is a code runner that allows you to refactor and run your code in one convenient location. With CodeBoost, you can improve the quality and readability of your code with just a few clicks, and then run it to see the results instantly.
+
+# Demo
+
+https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-80c9-2ea92fbcc5f9.mp4
 
 # Features
 - <b>Code refactoring:</b> CodeBoost makes it easy to refactor your code by suggesting changes that will improve its quality, readability, and performance. You can choose to refactor the whole code or part of code by selecting the code snippet and refactor that part.
