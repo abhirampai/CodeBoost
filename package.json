@@ -15,6 +15,8 @@
     "@uiw/react-codemirror": "4.11.1",
     "@vercel/analytics": "^0.1.11",
     "axios": "0.27.2",
+    "chatgpt": "^5.2.2",
+    "openai-authenticator": "^0.0.3",
     "ramda": "0.28.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
