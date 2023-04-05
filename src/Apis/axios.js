@@ -6,7 +6,7 @@ const axiosOptions = {
   headers: {
     "content-type": "application/json",
     "Content-Type": "application/json",
-    Authorization: `Bearer ${process.env.REACT_APP_CHATGPT_ACCESS_TOKEN}`,
+    Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_KEY}`,
     "X-RapidAPI-Key": process.env.REACT_APP_JUDGE0_KEY,
     "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
   },

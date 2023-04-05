@@ -99,18 +99,17 @@ const Main = () => {
       setIsLoading(true);
       const selectedValue = getSelectedRangeOfValue();
 
+      const chatInput = [
+        {
+          role: "system",
+          content: "You are a chatbot that can refactor any code.",
+        },
+        { role: "user", content: `Refactor code snippet ${selectedValue}` },
+      ];
+
       const { data: chatGptOutput } = await getRefactoredCode({
-        model: "text-davinci-002-render-sha",
-        messages: [
-          {
-            id: uuidv4(),
-            role: "user",
-            content: {
-              content_type: "text",
-              parts: [`Refactor code snippet: ${selectedValue}`],
-            },
-          },
-        ],
+        model: "gpt-3.5-turbo",
+        messages: chatInput,
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
