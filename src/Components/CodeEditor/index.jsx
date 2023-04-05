@@ -7,12 +7,12 @@ import { EditorView } from "@codemirror/view";
 import { mapLanguages } from "./utils";
 
 const CodeEditor = ({
-  editorRef,
+  editorRef = null,
   selectedLanguage,
   value,
-  onChange,
-  editable,
-  runCode,
+  onChange = ()=>{},
+  editable = false,
+  runCode = ()=>{},
 }) => {
   const handleIndentTab = (cm) => {
     const spaces = Array(cm.getOption("indentUnit") + 1).join(" ");

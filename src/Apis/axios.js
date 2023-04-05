@@ -8,8 +8,8 @@ const axiosOptions = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_KEY}`,
     "X-RapidAPI-Key": process.env.REACT_APP_JUDGE0_KEY,
-    "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
-  }
+    "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+  },
 };
 
 export default axios.create(axiosOptions);
