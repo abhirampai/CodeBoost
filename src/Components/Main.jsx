@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { assoc } from "ramda";
 
@@ -18,6 +19,7 @@ import OutputTerminalHeader from "./OutputTerminal/Header";
 import { useCreateCompletionApi } from "../Hooks/useRefactorApi";
 import Header from "./Header";
 import CodeActions from "./CodeActions";
+import ChatGptModal from "./ChatGptModal";
 
 const Main = () => {
   const outputRef = useRef(null);
@@ -28,6 +30,8 @@ const Main = () => {
   const [input, setInput] = useState();
   const [output, setOutput] = useState(DEFAULT_OUTPUT_VALUE);
   const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [chatGptOutput, setChatGptOutput] = useState("");
 
   const { mutateAsync: runCode } = useCreateSubmissionsApi();
   const { mutateAsync: getOutput } = useGetSubmissionsApi();
@@ -80,22 +84,37 @@ const Main = () => {
     }
   };
 
+  const getSelectedRangeOfValue = () => {
+    const cursorSelection = editorRef.current.view.state.selection.main;
+    const startRange = cursorSelection.from;
+    const endRange = cursorSelection.to;
+    return startRange !== endRange
+      ? value.substring(startRange, endRange)
+      : value;
+  };
+
   const refactorCode = async () => {
     try {
+      setShowModal(true);
       setIsLoading(true);
-      const cursorSelection = editorRef.current.view.state.selection.main;
-      const startRange = cursorSelection.from;
-      const endRange = cursorSelection.to;
-      const selectedValue =
-        startRange !== endRange ? value.substring(startRange, endRange) : value;
+      const selectedValue = getSelectedRangeOfValue();
 
       const { data: chatGptOutput } = await getRefactoredCode({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: `Refactor code snippet ${selectedValue}` }],
+        model: "text-davinci-002-render-sha",
+        messages: [
+          {
+            id: uuidv4(),
+            role: "user",
+            content: {
+              content_type: "text",
+              parts: [`Refactor code snippet: ${selectedValue}`],
+            },
+          },
+        ],
       });
 
       const refactoredCode = chatGptOutput.choices[0].message.content;
-      setValue((prevValue) => prevValue.replace(selectedValue, refactoredCode));
+      setChatGptOutput(refactoredCode);
     } catch (err) {
       console.log(err);
     } finally {
@@ -108,45 +127,55 @@ const Main = () => {
   };
 
   return (
-    <div className="flex flex-col p-4">
-      <Header />
-      <div className="md:flex md:w-full mt-4 justify-between items-center">
-        <LanguageSelector
-          selectedLanguage={selectedLanguage}
-          setSelectedLanguage={setSelectedLanguage}
-        />
-        <CodeActions
-          refactorCode={refactorCode}
-          runEditorCode={runEditorCode}
-          isLoading={isLoading}
-        />
+    <>
+      <div className="flex flex-col p-4">
+        <Header />
+        <div className="md:flex md:w-full mt-4 justify-between items-center">
+          <LanguageSelector
+            selectedLanguage={selectedLanguage}
+            setSelectedLanguage={setSelectedLanguage}
+          />
+          <CodeActions
+            refactorCode={refactorCode}
+            runEditorCode={runEditorCode}
+            isLoading={isLoading}
+          />
+        </div>
+        <div className="editor-height mt-5">
+          <CodeEditor
+            editorRef={editorRef}
+            selectedLanguage={selectedLanguage?.title.toLowerCase()}
+            value={value}
+            onChange={setValue}
+            editable={!isLoading}
+            runCode={runEditorCode}
+          />
+        </div>
+        <div className="flex flex-col mt-5">
+          <CustomInputHeader clearInput={clearInput} />
+          <CustomInput input={input} setInput={handleCustomInputChange} />
+        </div>
+        {output.data && (
+          <>
+            <div className="flex flex-col py-4">
+              <OutputTerminalHeader
+                status={output?.status}
+                clearOutput={clearOutput}
+              />
+              <OutputTerminal output={output?.data} outputRef={outputRef} />
+            </div>
+          </>
+        )}
       </div>
-      <div className="editor-height mt-5">
-        <CodeEditor
-          editorRef={editorRef}
-          selectedLanguage={selectedLanguage?.title.toLowerCase()}
-          value={value}
-          onChange={setValue}
-          editable={!isLoading}
-          runCode={runEditorCode}
-        />
-      </div>
-      <div className="flex flex-col mt-5">
-        <CustomInputHeader clearInput={clearInput} />
-        <CustomInput input={input} setInput={handleCustomInputChange} />
-      </div>
-      {output.data && (
-        <>
-          <div className="flex flex-col py-4">
-            <OutputTerminalHeader
-              status={output?.status}
-              clearOutput={clearOutput}
-            />
-            <OutputTerminal output={output?.data} outputRef={outputRef} />
-          </div>
-        </>
-      )}
-    </div>
+      <ChatGptModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        text={chatGptOutput}
+        setValue={setValue}
+        getSelectedValue={getSelectedRangeOfValue}
+        isLoading={isLoading}
+      />
+    </>
   );
 };
 

@@ -14,15 +14,17 @@
     "@uiw/codemirror-theme-sublime": "4.11.1",
     "@uiw/react-codemirror": "4.11.1",
     "@vercel/analytics": "^0.1.11",
+    "@uiw/react-md-editor": "^3.20.6",
+    "antd": "^5.4.0",
     "axios": "0.27.2",
-    "chatgpt": "^5.2.2",
-    "openai-authenticator": "^0.0.3",
     "ramda": "0.28.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-query": "3.39.1",
     "react-scripts": "4.0.0",
-    "react-select": "5.4.0"
+    "react-select": "5.4.0",
+    "rehype-sanitize": "^5.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
