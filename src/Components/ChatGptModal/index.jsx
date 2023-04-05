@@ -35,7 +35,7 @@ const ChatGptModal = ({
       Cancel
     </button>,
     <button
-      className="disabled:opacity-75 disabled:cursor-not-allowed border border-gray-200 bg-blue-700 text-white rounded-md px-4 py-2 md:m-2 mt-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline"
+      className="disabled:opacity-75 disabled:cursor-not-allowed border border-gray-200 bg-blue-700 text-white rounded-md px-4 py-2 md:m-2 mt-2 transition duration-500 ease select-none hover:bg-blue-500 focus:outline-none focus:shadow-outline"
       onClick={pasteCode}
     >
       Paste Code
@@ -46,7 +46,7 @@ const ChatGptModal = ({
     <Modal
       title="ChatGPT refactored code"
       open={showModal}
-      footer={Footer}
+      footer={!isLoading ? Footer : null}
       width={1000}
     >
       {isLoading ? (
