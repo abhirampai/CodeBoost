@@ -12,6 +12,7 @@
     "@codemirror/lang-rust": "6.0.0",
     "@codemirror/legacy-modes": "6.1.0",
     "@mlc-ai/web-llm": "^0.2.51",
+    "@preact/signals-react": "^2.1.0",
     "@uiw/codemirror-theme-sublime": "4.11.1",
     "@uiw/react-codemirror": "4.11.1",
     "@uiw/react-md-editor": "^3.20.6",

@@ -95,8 +95,9 @@ const Main = ({ webLlmEngine }) => {
       setShowModal(true);
       setIsLoading(true);
       const selectedValue = getSelectedRangeOfValue();
+      const engine = await webLlmEngine;
 
-      const webLlmOutput = await webLlmEngine.chat.completions.create({
+      const webLlmOutput = await engine.chat.completions.create({
         messages: [
           {
             role: "system",
