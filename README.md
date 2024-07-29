@@ -23,7 +23,7 @@ https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-
 
 # APIs
 - Judge0CE
-- ChatGPT
+- [web-llm](https://github.com/mlc-ai/web-llm) with Phi 3 model
 
 # Contributing
 If you want to contribute to this project, feel free to open an issue or submit a pull request on GitHub.

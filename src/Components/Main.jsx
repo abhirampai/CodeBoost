@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 import { assoc } from "ramda";
 
@@ -16,12 +15,11 @@ import { decodeString, encodeString } from "./utils";
 import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
-import { useCreateCompletionApi } from "../Hooks/useRefactorApi";
 import Header from "./Header";
 import CodeActions from "./CodeActions";
 import ChatGptModal from "./ChatGptModal";
 
-const Main = () => {
+const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -35,7 +33,6 @@ const Main = () => {
 
   const { mutateAsync: runCode } = useCreateSubmissionsApi();
   const { mutateAsync: getOutput } = useGetSubmissionsApi();
-  const { mutateAsync: getRefactoredCode } = useCreateCompletionApi();
 
   useEffect(() => {
     setValue(selectedLanguage?.stub);
@@ -71,7 +68,7 @@ const Main = () => {
 
       if (outputData.status_id === 3) {
         setOutput(
-          assoc("data", decodeString(outputData.stdout) || "Empty Ouput")
+          assoc("data", decodeString(outputData.stdout) || "Empty Ouput"),
         );
       } else {
         setOutput(assoc("data", decodeString(outputData.stderr)));
@@ -98,26 +95,29 @@ const Main = () => {
       setShowModal(true);
       setIsLoading(true);
       const selectedValue = getSelectedRangeOfValue();
+      const engine = await webLlmEngine;
 
-      const chatInput = [
-        {
-          role: "system",
-          content: "You are a chatbot that can refactor any code.",
-        },
-        { role: "user", content: `Refactor code snippet ${selectedValue}` },
-      ];
-
-      const { data: chatGptOutput } = await getRefactoredCode({
-        model: "gpt-3.5-turbo",
-        messages: chatInput,
+      const webLlmOutput = await engine.chat.completions.create({
+        messages: [
+          {
+            role: "system",
+            content: `You are a chatbot that can refactor any code.
+              Always return the code block in markdown style with comments about the refactored code.
+              Always suggest the output in the requested language itself with a single code block.`,
+          },
+          { role: "user", content: `Refactor code snippet ${selectedValue}` },
+        ],
+        temperature: 0.5,
+        stream: true, // <-- Enable streaming
       });
 
-      const refactoredCode = chatGptOutput.choices[0].message.content;
-      setChatGptOutput(refactoredCode);
+      for await (const chunk of webLlmOutput) {
+        const reply = chunk.choices[0]?.delta.content || "";
+        setChatGptOutput((answer) => answer + reply);
+        setIsLoading(false);
+      }
     } catch (err) {
       console.log(err);
-    } finally {
-      setIsLoading(false);
     }
   };
 
