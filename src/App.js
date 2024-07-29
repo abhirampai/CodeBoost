@@ -14,9 +14,9 @@ export default function App() {
 
   if (modelLoading.value) {
     return (
-      <div className="flex flex-col w-full h-screen justify-center p-20">
+      <div className="flex flex-col w-full h-screen justify-center items-center p-20">
+        <Progress showInfo percent={percent.value} type="circle" />
         Please Wait while the model is being loaded...
-        <Progress showInfo percent={percent.value} />
       </div>
     );
   }
