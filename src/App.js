@@ -3,22 +3,21 @@ import Main from "./Components/Main";
 import "./styles.css";
 import { useContext } from "react";
 import { AppState } from "./Hooks/utils";
-import { Spin } from "antd";
+import { Progress } from "antd";
 import { useSignals } from "@preact/signals-react/runtime";
 
 const queryClient = new QueryClient();
 
 export default function App() {
   useSignals();
-  const { modelLoading, webLlmEngine } = useContext(AppState);
+  const { modelLoading, percent, webLlmEngine } = useContext(AppState);
 
   if (modelLoading.value) {
     return (
-      <Spin
-        fullscreen
-        tip="Please wait while the model is being loaded..."
-        size="large"
-      />
+      <div className="flex flex-col w-full h-screen justify-center p-20">
+        Please Wait while the model is being loaded...
+        <Progress showInfo percent={percent.value} />
+      </div>
     );
   }
 
