@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppState, createAppState } from "./Components/utils";
+import { AppState, createAppState } from "./Hooks/utils";
 
 import App from "./App";
 
