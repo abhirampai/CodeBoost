@@ -173,6 +173,7 @@ const Main = ({ webLlmEngine }) => {
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}
         isLoading={isLoading}
+        setChatGptOutput={setChatGptOutput}
       />
     </>
   );

@@ -9,6 +9,7 @@ const ChatGptModal = ({
   setValue,
   getSelectedValue,
   isLoading,
+  setChatGptOutput,
 }) => {
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
@@ -20,10 +21,12 @@ const ChatGptModal = ({
     const code = extractCodeFromBlock(text);
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
+    setChatGptOutput("");
     setShowModal(false);
   };
 
   const handleCancel = () => {
+    setChatGptOutput("");
     setShowModal(false);
   };
 
@@ -50,6 +53,7 @@ const ChatGptModal = ({
       open={showModal}
       footer={!isLoading ? Footer : null}
       width={1000}
+      onCancel={handleCancel}
     >
       {isLoading ? (
         <div className="flex w-full h-full justify-center">
