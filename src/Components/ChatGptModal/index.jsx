@@ -53,7 +53,7 @@ const ChatGptModal = ({
       open={showModal}
       footer={!isLoading ? Footer : null}
       width={1000}
-      afterClose={handleCancel}
+      onCancel={handleCancel}
     >
       {isLoading ? (
         <div className="flex w-full h-full justify-center">
