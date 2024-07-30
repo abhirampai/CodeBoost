@@ -3,15 +3,11 @@ import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import { useContext } from "react";
 import { AppState } from "../../Hooks/utils";
+import { useSignals } from "@preact/signals-react/runtime";
 
-const RefactorModal = ({
-  text,
-  setValue,
-  getSelectedValue,
-  isLoading,
-  setChatGptOutput,
-}) => {
-  const { showWebLlmModal } = useContext(AppState);
+const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
+  useSignals();
+  const { showWebLlmModal, engineOutput, generatedText } = useContext(AppState);
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
       (match) => match[1],
@@ -19,15 +15,15 @@ const RefactorModal = ({
 
   const pasteCode = () => {
     const selectedValue = getSelectedValue();
-    const code = extractCodeFromBlock(text);
+    const code = extractCodeFromBlock(generatedText.value);
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
-    setChatGptOutput("");
+    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
   const handleCancel = () => {
-    setChatGptOutput("");
+    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
@@ -62,7 +58,7 @@ const RefactorModal = ({
         </div>
       ) : (
         <MDEditor.Markdown
-          source={text}
+          source={generatedText.value}
           style={{ padding: 10 }}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],

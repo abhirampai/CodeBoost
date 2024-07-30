@@ -24,14 +24,13 @@ const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
-  const { showWebLlmModal } = useContext(AppState);
+  const { showWebLlmModal, engineOutput } = useContext(AppState);
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
   const [input, setInput] = useState();
   const [output, setOutput] = useState(DEFAULT_OUTPUT_VALUE);
   const [isLoading, setIsLoading] = useState(false);
-  const [chatGptOutput, setChatGptOutput] = useState("");
 
   const { mutateAsync: runCode } = useCreateSubmissionsApi();
   const { mutateAsync: getOutput } = useGetSubmissionsApi();
@@ -108,7 +107,7 @@ const Main = ({ webLlmEngine }) => {
 
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
-        setChatGptOutput((answer) => answer + reply);
+        engineOutput.value += reply;
         setIsLoading(false);
       }
     } catch (err) {
@@ -162,11 +161,9 @@ const Main = ({ webLlmEngine }) => {
         )}
       </div>
       <RefactorModal
-        text={chatGptOutput}
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}
         isLoading={isLoading}
-        setChatGptOutput={setChatGptOutput}
       />
     </>
   );

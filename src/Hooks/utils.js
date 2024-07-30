@@ -19,6 +19,15 @@ export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
   const isLoading = signal(true);
+  const showWebLlmModal = signal(false);
+  const engineOutput = signal("");
+
+  const isModelLoading = computed(() => isLoading.value);
+  const percent = computed(() =>
+    Math.floor((startProgress?.value / endProgress?.value) * 100),
+  );
+  const generatedText = computed(() => engineOutput.value);
+
   const webLlmEngine = CreateWebWorkerMLCEngine(
     new Worker(new URL("../worker.js", import.meta.url), {
       type: "module",
@@ -29,13 +38,15 @@ export const createAppState = () => {
         initProgressCallback(progress, startProgress, endProgress, isLoading),
     },
   );
-  const isModelLoading = computed(() => isLoading.value);
-  const percent = computed(() =>
-    Math.floor((startProgress?.value / endProgress?.value) * 100),
-  );
-  const showWebLlmModal = signal(false);
 
-  return { percent, isModelLoading, webLlmEngine, showWebLlmModal };
+  return {
+    percent,
+    isModelLoading,
+    webLlmEngine,
+    showWebLlmModal,
+    engineOutput,
+    generatedText,
+  };
 };
 
 export const AppState = createContext();
