@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { assoc } from "ramda";
 
@@ -11,25 +11,27 @@ import CustomInput from "./CustomInput";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_OPTIONS } from "./LanguageSelector/constants";
 import OutputTerminal from "./OutputTerminal";
-import { decodeString, encodeString } from "./utils";
+import { decodeString, encodeString, webLlmEngineInput } from "./utils";
 import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
 import Header from "./Header";
 import CodeActions from "./CodeActions";
-import ChatGptModal from "./ChatGptModal";
+import RefactorModal from "./RefactorModal";
+import { AppState } from "../Hooks/utils";
 
 const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
+
+  const { showWebLlmModal, engineOutput, engineStreamLoading } =
+    useContext(AppState);
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
   const [input, setInput] = useState();
   const [output, setOutput] = useState(DEFAULT_OUTPUT_VALUE);
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [chatGptOutput, setChatGptOutput] = useState("");
 
   const { mutateAsync: runCode } = useCreateSubmissionsApi();
   const { mutateAsync: getOutput } = useGetSubmissionsApi();
@@ -95,30 +97,24 @@ const Main = ({ webLlmEngine }) => {
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
-      setShowModal(true);
+      showWebLlmModal.value = true;
+      engineStreamLoading.value = true;
       setIsLoading(true);
 
       const engine = await webLlmEngine;
 
-      const webLlmOutput = await engine.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: `You are a chatbot that can refactor any code.
-              Always return the code block in markdown style with comments about the refactored code.
-              Always suggest the output in the requested language itself with a single code block.`,
-          },
-          { role: "user", content: `Refactor code snippet ${selectedValue}` },
-        ],
-        temperature: 0.5,
-        stream: true, // <-- Enable streaming
-      });
+      engine.interruptGenerate();
+      const webLlmOutput = await engine.chat.completions.create(
+        webLlmEngineInput(selectedValue),
+      );
 
+      engineOutput.value = "";
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
-        setChatGptOutput((answer) => answer + reply);
+        engineOutput.value += reply;
         setIsLoading(false);
       }
+      engineStreamLoading.value = false;
     } catch (err) {
       console.log(err);
     }
@@ -169,14 +165,10 @@ const Main = ({ webLlmEngine }) => {
           </>
         )}
       </div>
-      <ChatGptModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        text={chatGptOutput}
+      <RefactorModal
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}
         isLoading={isLoading}
-        setChatGptOutput={setChatGptOutput}
       />
     </>
   );

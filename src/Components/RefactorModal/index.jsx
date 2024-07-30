@@ -1,16 +1,15 @@
 import { Modal, Spin } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
+import { useContext } from "react";
+import { AppState } from "../../Hooks/utils";
+import { useSignals } from "@preact/signals-react/runtime";
 
-const ChatGptModal = ({
-  showModal,
-  setShowModal,
-  text,
-  setValue,
-  getSelectedValue,
-  isLoading,
-  setChatGptOutput,
-}) => {
+const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
+  useSignals();
+  const { showWebLlmModal, engineOutput, isEngineStreamLoading } =
+    useContext(AppState);
+
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
       (match) => match[1],
@@ -18,16 +17,16 @@ const ChatGptModal = ({
 
   const pasteCode = () => {
     const selectedValue = getSelectedValue();
-    const code = extractCodeFromBlock(text);
+    const code = extractCodeFromBlock(engineOutput.value);
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
-    setChatGptOutput("");
-    setShowModal(false);
+    engineOutput.value = "";
+    showWebLlmModal.value = false;
   };
 
   const handleCancel = () => {
-    setChatGptOutput("");
-    setShowModal(false);
+    engineOutput.value = "";
+    showWebLlmModal.value = false;
   };
 
   const Footer = [
@@ -42,6 +41,7 @@ const ChatGptModal = ({
       key="pasteCode"
       className="disabled:opacity-75 disabled:cursor-not-allowed border border-gray-200 bg-blue-700 text-white rounded-md px-4 py-2 md:m-2 mt-2 transition duration-500 ease select-none hover:bg-blue-500 focus:outline-none focus:shadow-outline"
       onClick={pasteCode}
+      disabled={isEngineStreamLoading.value}
     >
       Paste Code
     </button>,
@@ -50,7 +50,7 @@ const ChatGptModal = ({
   return (
     <Modal
       title="WebLLM Phi-3 refactored code"
-      open={showModal}
+      open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
       onCancel={handleCancel}
@@ -61,7 +61,7 @@ const ChatGptModal = ({
         </div>
       ) : (
         <MDEditor.Markdown
-          source={text}
+          source={engineOutput.value}
           style={{ padding: 10 }}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],
@@ -71,4 +71,4 @@ const ChatGptModal = ({
     </Modal>
   );
 };
-export default ChatGptModal;
+export default RefactorModal;
