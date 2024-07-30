@@ -21,12 +21,14 @@ export const createAppState = () => {
   const isLoading = signal(true);
   const showWebLlmModal = signal(false);
   const engineOutput = signal("");
+  const engineStreamLoading = signal(false);
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
     Math.floor((startProgress?.value / endProgress?.value) * 100),
   );
   const generatedText = computed(() => engineOutput.value);
+  const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
   const webLlmEngine = CreateWebWorkerMLCEngine(
     new Worker(new URL("../worker.js", import.meta.url), {
@@ -46,6 +48,8 @@ export const createAppState = () => {
     showWebLlmModal,
     engineOutput,
     generatedText,
+    engineStreamLoading,
+    isEngineStreamLoading,
   };
 };
 

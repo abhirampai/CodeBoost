@@ -7,7 +7,15 @@ import { useSignals } from "@preact/signals-react/runtime";
 
 const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
   useSignals();
-  const { showWebLlmModal, engineOutput, generatedText } = useContext(AppState);
+  const {
+    showWebLlmModal,
+    engineOutput,
+    generatedText,
+    isEngineStreamLoading,
+  } = useContext(AppState);
+
+  console.log({ isEngineStreamLoading: isEngineStreamLoading.value });
+
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
       (match) => match[1],
@@ -39,6 +47,7 @@ const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
       key="pasteCode"
       className="disabled:opacity-75 disabled:cursor-not-allowed border border-gray-200 bg-blue-700 text-white rounded-md px-4 py-2 md:m-2 mt-2 transition duration-500 ease select-none hover:bg-blue-500 focus:outline-none focus:shadow-outline"
       onClick={pasteCode}
+      disabled={isEngineStreamLoading.value}
     >
       Paste Code
     </button>,

@@ -24,7 +24,8 @@ const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
-  const { showWebLlmModal, engineOutput } = useContext(AppState);
+  const { showWebLlmModal, engineOutput, engineStreamLoading } =
+    useContext(AppState);
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
@@ -97,6 +98,7 @@ const Main = ({ webLlmEngine }) => {
       if (!selectedValue && selectedValue === "") return;
 
       showWebLlmModal.value = true;
+      engineStreamLoading.value = true;
       setIsLoading(true);
 
       const engine = await webLlmEngine;
@@ -110,6 +112,7 @@ const Main = ({ webLlmEngine }) => {
         engineOutput.value += reply;
         setIsLoading(false);
       }
+      engineStreamLoading.value = false;
     } catch (err) {
       console.log(err);
     }
