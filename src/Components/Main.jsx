@@ -17,7 +17,7 @@ import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
 import Header from "./Header";
 import CodeActions from "./CodeActions";
-import ChatGptModal from "./ChatGptModal";
+import RefactorModal from "./RefactorModal";
 import { AppState } from "../Hooks/utils";
 
 const Main = ({ webLlmEngine }) => {
@@ -161,7 +161,7 @@ const Main = ({ webLlmEngine }) => {
           </>
         )}
       </div>
-      <ChatGptModal
+      <RefactorModal
         text={chatGptOutput}
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}

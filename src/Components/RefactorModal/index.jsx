@@ -4,7 +4,7 @@ import rehypeSanitize from "rehype-sanitize";
 import { useContext } from "react";
 import { AppState } from "../../Hooks/utils";
 
-const ChatGptModal = ({
+const RefactorModal = ({
   text,
   setValue,
   getSelectedValue,
@@ -72,4 +72,4 @@ const ChatGptModal = ({
     </Modal>
   );
 };
-export default ChatGptModal;
+export default RefactorModal;
