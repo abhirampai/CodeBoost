@@ -7,14 +7,8 @@ import { useSignals } from "@preact/signals-react/runtime";
 
 const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
   useSignals();
-  const {
-    showWebLlmModal,
-    engineOutput,
-    generatedText,
-    isEngineStreamLoading,
-  } = useContext(AppState);
-
-  console.log({ isEngineStreamLoading: isEngineStreamLoading.value });
+  const { showWebLlmModal, engineOutput, isEngineStreamLoading } =
+    useContext(AppState);
 
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
@@ -23,7 +17,7 @@ const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
 
   const pasteCode = () => {
     const selectedValue = getSelectedValue();
-    const code = extractCodeFromBlock(generatedText.value);
+    const code = extractCodeFromBlock(engineOutput.value);
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
     engineOutput.value = "";
@@ -67,7 +61,7 @@ const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
         </div>
       ) : (
         <MDEditor.Markdown
-          source={generatedText.value}
+          source={engineOutput.value}
           style={{ padding: 10 }}
           previewOptions={{
             rehypePlugins: [[rehypeSanitize]],

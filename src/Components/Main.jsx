@@ -103,10 +103,12 @@ const Main = ({ webLlmEngine }) => {
 
       const engine = await webLlmEngine;
 
+      engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
         webLlmEngineInput(selectedValue),
       );
 
+      engineOutput.value = "";
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
         engineOutput.value += reply;

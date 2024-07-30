@@ -27,7 +27,6 @@ export const createAppState = () => {
   const percent = computed(() =>
     Math.floor((startProgress?.value / endProgress?.value) * 100),
   );
-  const generatedText = computed(() => engineOutput.value);
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
   const webLlmEngine = CreateWebWorkerMLCEngine(
@@ -47,7 +46,6 @@ export const createAppState = () => {
     webLlmEngine,
     showWebLlmModal,
     engineOutput,
-    generatedText,
     engineStreamLoading,
     isEngineStreamLoading,
   };
