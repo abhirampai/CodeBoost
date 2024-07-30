@@ -10,16 +10,7 @@ const queryClient = new QueryClient();
 
 export default function App() {
   useSignals();
-  const { modelLoading, percent, webLlmEngine } = useContext(AppState);
-
-  if (modelLoading.value) {
-    return (
-      <div className="flex flex-col w-full h-screen justify-center items-center p-20">
-        <Progress showInfo percent={percent.value} type="circle" />
-        Please wait while the model is being loaded...
-      </div>
-    );
-  }
+  const { webLlmEngine } = useContext(AppState);
 
   return (
     <QueryClientProvider client={queryClient}>

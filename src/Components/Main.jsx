@@ -92,9 +92,12 @@ const Main = ({ webLlmEngine }) => {
 
   const refactorCode = async () => {
     try {
+      const selectedValue = getSelectedRangeOfValue();
+      if (!selectedValue && selectedValue === "") return;
+
       setShowModal(true);
       setIsLoading(true);
-      const selectedValue = getSelectedRangeOfValue();
+
       const engine = await webLlmEngine;
 
       const webLlmOutput = await engine.chat.completions.create({

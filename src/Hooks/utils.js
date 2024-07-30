@@ -29,12 +29,12 @@ export const createAppState = () => {
         initProgressCallback(progress, startProgress, endProgress, isLoading),
     },
   );
-  const modelLoading = computed(() => isLoading.value);
+  const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
     Math.floor((startProgress?.value / endProgress?.value) * 100),
   );
 
-  return { percent, modelLoading, webLlmEngine };
+  return { percent, isModelLoading, webLlmEngine };
 };
 
 export const AppState = createContext();
