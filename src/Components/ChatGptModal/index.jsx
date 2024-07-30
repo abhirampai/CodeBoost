@@ -1,16 +1,17 @@
 import { Modal, Spin } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
+import { useContext } from "react";
+import { AppState } from "../../Hooks/utils";
 
 const ChatGptModal = ({
-  showModal,
-  setShowModal,
   text,
   setValue,
   getSelectedValue,
   isLoading,
   setChatGptOutput,
 }) => {
+  const { showWebLlmModal } = useContext(AppState);
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
       (match) => match[1],
@@ -22,12 +23,12 @@ const ChatGptModal = ({
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
     setChatGptOutput("");
-    setShowModal(false);
+    showWebLlmModal.value = false;
   };
 
   const handleCancel = () => {
     setChatGptOutput("");
-    setShowModal(false);
+    showWebLlmModal.value = false;
   };
 
   const Footer = [
@@ -50,7 +51,7 @@ const ChatGptModal = ({
   return (
     <Modal
       title="WebLLM Phi-3 refactored code"
-      open={showModal}
+      open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
       onCancel={handleCancel}

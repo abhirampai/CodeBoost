@@ -33,8 +33,9 @@ export const createAppState = () => {
   const percent = computed(() =>
     Math.floor((startProgress?.value / endProgress?.value) * 100),
   );
+  const showWebLlmModal = signal(false);
 
-  return { percent, isModelLoading, webLlmEngine };
+  return { percent, isModelLoading, webLlmEngine, showWebLlmModal };
 };
 
 export const AppState = createContext();

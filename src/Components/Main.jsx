@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { assoc } from "ramda";
 
@@ -18,17 +18,19 @@ import OutputTerminalHeader from "./OutputTerminal/Header";
 import Header from "./Header";
 import CodeActions from "./CodeActions";
 import ChatGptModal from "./ChatGptModal";
+import { AppState } from "../Hooks/utils";
 
 const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
+
+  const { showWebLlmModal } = useContext(AppState);
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
   const [input, setInput] = useState();
   const [output, setOutput] = useState(DEFAULT_OUTPUT_VALUE);
   const [isLoading, setIsLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [chatGptOutput, setChatGptOutput] = useState("");
 
   const { mutateAsync: runCode } = useCreateSubmissionsApi();
@@ -95,7 +97,7 @@ const Main = ({ webLlmEngine }) => {
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
-      setShowModal(true);
+      showWebLlmModal.value = true;
       setIsLoading(true);
 
       const engine = await webLlmEngine;
@@ -160,8 +162,6 @@ const Main = ({ webLlmEngine }) => {
         )}
       </div>
       <ChatGptModal
-        showModal={showModal}
-        setShowModal={setShowModal}
         text={chatGptOutput}
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}
