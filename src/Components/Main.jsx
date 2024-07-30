@@ -11,7 +11,7 @@ import CustomInput from "./CustomInput";
 import LanguageSelector from "./LanguageSelector";
 import { LANGUAGE_OPTIONS } from "./LanguageSelector/constants";
 import OutputTerminal from "./OutputTerminal";
-import { decodeString, encodeString } from "./utils";
+import { decodeString, encodeString, webLlmEngineInput } from "./utils";
 import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
 import OutputTerminalHeader from "./OutputTerminal/Header";
@@ -100,19 +100,9 @@ const Main = ({ webLlmEngine }) => {
 
       const engine = await webLlmEngine;
 
-      const webLlmOutput = await engine.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content: `You are a chatbot that can refactor any code.
-              Always return the code block in markdown style with comments about the refactored code.
-              Always suggest the output in the requested language itself with a single code block.`,
-          },
-          { role: "user", content: `Refactor code snippet ${selectedValue}` },
-        ],
-        temperature: 0.5,
-        stream: true, // <-- Enable streaming
-      });
+      const webLlmOutput = await engine.chat.completions.create(
+        webLlmEngineInput(selectedValue),
+      );
 
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
