@@ -3,7 +3,6 @@ import Main from "./Components/Main";
 import "./styles.css";
 import { useContext } from "react";
 import { AppState } from "./Hooks/utils";
-import { Progress } from "antd";
 import { useSignals } from "@preact/signals-react/runtime";
 
 const queryClient = new QueryClient();
