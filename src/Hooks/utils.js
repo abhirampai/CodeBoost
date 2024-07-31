@@ -15,6 +15,23 @@ const initProgressCallback = (initProgress, start, end, isLoading) => {
   }
 };
 
+const createWebWorker = (startProgress, endProgress, isLoading) => {
+  try {
+    return CreateWebWorkerMLCEngine(
+      new Worker(new URL("../worker.js", import.meta.url), {
+        type: "module",
+      }),
+      selectedModel,
+      {
+        initProgressCallback: (progress) =>
+          initProgressCallback(progress, startProgress, endProgress, isLoading),
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
@@ -25,20 +42,11 @@ export const createAppState = () => {
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
-    Math.floor((startProgress?.value / endProgress?.value) * 100),
+    Math.floor((startProgress?.value / endProgress?.value) * 100)
   );
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
-  const webLlmEngine = CreateWebWorkerMLCEngine(
-    new Worker(new URL("../worker.js", import.meta.url), {
-      type: "module",
-    }),
-    selectedModel,
-    {
-      initProgressCallback: (progress) =>
-        initProgressCallback(progress, startProgress, endProgress, isLoading),
-    },
-  );
+  const webLlmEngine = createWebWorker(startProgress, endProgress, isLoading);
 
   return {
     percent,
