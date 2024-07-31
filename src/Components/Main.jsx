@@ -19,6 +19,7 @@ import Header from "./Header";
 import CodeActions from "./CodeActions";
 import RefactorModal from "./RefactorModal";
 import { AppState } from "../Hooks/utils";
+import UnsupportedBrowserCallout from "./UnsupportedBrowserCallout";
 
 const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
@@ -126,6 +127,7 @@ const Main = ({ webLlmEngine }) => {
 
   return (
     <>
+      <UnsupportedBrowserCallout />
       <div className="flex flex-col p-4">
         <Header />
         <div className="md:flex md:w-full mt-4 justify-between items-center">
