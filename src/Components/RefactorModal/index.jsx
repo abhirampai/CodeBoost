@@ -5,14 +5,19 @@ import { useContext } from "react";
 import { AppState } from "../../Hooks/utils";
 import { useSignals } from "@preact/signals-react/runtime";
 
-const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
+const RefactorModal = ({
+  setValue,
+  getSelectedValue,
+  isLoading,
+  regenerateResponse,
+}) => {
   useSignals();
   const { showWebLlmModal, engineOutput, isEngineStreamLoading } =
     useContext(AppState);
 
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
-      (match) => match[1],
+      (match) => match[1]
     );
 
   const pasteCode = () => {
@@ -36,6 +41,14 @@ const RefactorModal = ({ setValue, getSelectedValue, isLoading }) => {
       onClick={handleCancel}
     >
       Cancel
+    </button>,
+    <button
+      key="regenerateResponse"
+      className="disabled:opacity-75 disabled:cursor-not-allowed border border-gray-200 bg-gray-200 text-gray-700 rounded-md px-4 py-2 md:m-2 mt-2 transition duration-500 ease select-none hover:bg-gray-300 focus:outline-none focus:shadow-outline"
+      onClick={regenerateResponse}
+      disabled={isEngineStreamLoading.value}
+    >
+      Regenerate Response
     </button>,
     <button
       key="pasteCode"
