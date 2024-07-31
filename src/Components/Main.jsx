@@ -70,7 +70,7 @@ const Main = ({ webLlmEngine }) => {
 
       if (outputData.status_id === 3) {
         setOutput(
-          assoc("data", decodeString(outputData.stdout) || "Empty Ouput"),
+          assoc("data", decodeString(outputData.stdout) || "Empty Output")
         );
       } else {
         setOutput(assoc("data", decodeString(outputData.stderr)));
@@ -105,7 +105,7 @@ const Main = ({ webLlmEngine }) => {
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
-        webLlmEngineInput(selectedValue),
+        webLlmEngineInput(selectedValue)
       );
 
       engineOutput.value = "";
@@ -169,6 +169,7 @@ const Main = ({ webLlmEngine }) => {
         setValue={setValue}
         getSelectedValue={getSelectedRangeOfValue}
         isLoading={isLoading}
+        regenerateResponse={refactorCode}
       />
     </>
   );
