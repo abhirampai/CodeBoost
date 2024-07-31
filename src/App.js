@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Main from "./Components/Main";
 import "./styles.css";
 import { useContext } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { AppState } from "./Hooks/utils";
 import { useSignals } from "@preact/signals-react/runtime";
 
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Main webLlmEngine={webLlmEngine} />
+      <Analytics mode="production" />
     </QueryClientProvider>
   );
 }
