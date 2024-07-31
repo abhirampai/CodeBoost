@@ -39,6 +39,7 @@ export const createAppState = () => {
   const showWebLlmModal = signal(false);
   const engineOutput = signal("");
   const engineStreamLoading = signal(false);
+  const isUnsupportedBrowser = signal(!navigator.gpu);
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
@@ -46,7 +47,9 @@ export const createAppState = () => {
   );
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
-  const webLlmEngine = createWebWorker(startProgress, endProgress, isLoading);
+  const webLlmEngine = !isUnsupportedBrowser.value
+    ? createWebWorker(startProgress, endProgress, isLoading)
+    : null;
 
   return {
     percent,
@@ -56,6 +59,7 @@ export const createAppState = () => {
     engineOutput,
     engineStreamLoading,
     isEngineStreamLoading,
+    isUnsupportedBrowser,
   };
 };
 
