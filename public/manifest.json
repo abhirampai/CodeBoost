@@ -1,0 +1,19 @@
+{
+  "short_name": "CodeBoost",
+  "name": "CodeBoost",
+  "description": "CodeBoost is a code runner that allows you to refactor and run your code in one convenient location. With CodeBoost, you can improve the quality and readability of your code with just a few clicks, and then run it to see the results instantly.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "175x86",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "500x500"
+    }
+  ],
+  "start_url": ".",
+  "display": "Standalone"
+}
