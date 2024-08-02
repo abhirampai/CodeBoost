@@ -1,8 +1,8 @@
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { defaultKeymap } from "@codemirror/commands";
 import { keymap } from "@codemirror/view";
 import { sublime } from "@uiw/codemirror-theme-sublime";
-import { defaultKeymap } from "@codemirror/commands";
-import { EditorView } from "@codemirror/view";
 
 import { mapLanguages } from "./utils";
 
@@ -10,9 +10,9 @@ const CodeEditor = ({
   editorRef = null,
   selectedLanguage,
   value,
-  onChange = ()=>{},
+  onChange = () => {},
   editable = false,
-  runCode = ()=>{},
+  runCode = () => {},
 }) => {
   const handleIndentTab = (cm) => {
     const spaces = Array(cm.getOption("indentUnit") + 1).join(" ");

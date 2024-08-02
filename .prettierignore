@@ -1,0 +1,7 @@
+# Ignore artifacts:
+build
+coverage
+public
+.vercel
+.codesandbox
+README.md

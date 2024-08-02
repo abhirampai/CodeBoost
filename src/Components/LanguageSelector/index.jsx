@@ -1,4 +1,5 @@
 import Select from "react-select";
+
 import { LANGUAGE_OPTIONS } from "./constants";
 
 const LanguageSelector = ({ selectedLanguage, setSelectedLanguage }) => {

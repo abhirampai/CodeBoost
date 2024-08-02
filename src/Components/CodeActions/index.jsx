@@ -1,5 +1,6 @@
 import { Progress, Tooltip } from "antd";
 import { useContext } from "react";
+
 import { AppState } from "../../Hooks/utils";
 
 const CodeActions = ({ runEditorCode, refactorCode, isLoading }) => {
@@ -18,7 +19,9 @@ const CodeActions = ({ runEditorCode, refactorCode, isLoading }) => {
       {!isUnsupportedBrowser.value && (
         <Tooltip
           title={
-            isModelLoading ? `Model is being loaded - ${percent.value}%` : ""
+            isModelLoading.value
+              ? `Model is being loaded - ${percent.value}%`
+              : ""
           }
           placement="topRight"
         >

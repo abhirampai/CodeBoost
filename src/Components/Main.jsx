@@ -2,23 +2,24 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import { assoc } from "ramda";
 
+import { DEFAULT_OUTPUT_VALUE, OUTPUT_STATUES } from "./contants";
+import { decodeString, encodeString, webLlmEngineInput } from "./utils";
 import {
   useCreateSubmissionsApi,
   useGetSubmissionsApi,
 } from "../Hooks/useSubmissionsApi";
+import { AppState } from "../Hooks/utils";
+import { LANGUAGE_OPTIONS } from "./LanguageSelector/constants";
+
+import CodeActions from "./CodeActions";
 import CodeEditor from "./CodeEditor";
 import CustomInput from "./CustomInput";
-import LanguageSelector from "./LanguageSelector";
-import { LANGUAGE_OPTIONS } from "./LanguageSelector/constants";
-import OutputTerminal from "./OutputTerminal";
-import { decodeString, encodeString, webLlmEngineInput } from "./utils";
-import { OUTPUT_STATUES, DEFAULT_OUTPUT_VALUE } from "./contants";
 import CustomInputHeader from "./CustomInput/Header";
-import OutputTerminalHeader from "./OutputTerminal/Header";
 import Header from "./Header";
-import CodeActions from "./CodeActions";
+import LanguageSelector from "./LanguageSelector";
+import OutputTerminal from "./OutputTerminal";
+import OutputTerminalHeader from "./OutputTerminal/Header";
 import RefactorModal from "./RefactorModal";
-import { AppState } from "../Hooks/utils";
 import UnsupportedBrowserCallout from "./UnsupportedBrowserCallout";
 
 const Main = ({ webLlmEngine }) => {
@@ -71,7 +72,7 @@ const Main = ({ webLlmEngine }) => {
 
       if (outputData.status_id === 3) {
         setOutput(
-          assoc("data", decodeString(outputData.stdout) || "Empty Output")
+          assoc("data", decodeString(outputData.stdout) || "Empty Output"),
         );
       } else {
         setOutput(assoc("data", decodeString(outputData.stderr)));
@@ -106,7 +107,7 @@ const Main = ({ webLlmEngine }) => {
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
-        webLlmEngineInput(selectedValue)
+        webLlmEngineInput(selectedValue),
       );
 
       engineOutput.value = "";

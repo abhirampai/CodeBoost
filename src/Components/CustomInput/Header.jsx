@@ -7,7 +7,7 @@ const CustomInputHeader = ({ clearInput }) => {
         onClick={clearInput}
       >
         Clear Input
-        </button>
+      </button>
     </div>
   );
 };
