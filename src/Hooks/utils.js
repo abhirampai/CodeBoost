@@ -1,6 +1,6 @@
 import { computed, signal } from "@preact/signals-react";
 import { createContext } from "react";
-import { CreateWebWorkerMLCEngine } from "@mlc-ai/web-llm";
+import { CreateWebWorkerMLCEngine, deleteModelAllInfoInCache } from "@mlc-ai/web-llm";
 import { SELECTED_MODEL, WEBLLM_CONFIG } from "./constants";
 
 const initProgressCallback = (initProgress, start, end, isLoading) => {
@@ -32,6 +32,10 @@ const createWebWorker = (startProgress, endProgress, isLoading) => {
   }
 };
 
+const deleteAllModelInfoInCache = async () => {
+  await deleteModelAllInfoInCache(SELECTED_MODEL);
+};
+
 export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
@@ -50,6 +54,7 @@ export const createAppState = () => {
   const webLlmEngine = !isUnsupportedBrowser.value
     ? createWebWorker(startProgress, endProgress, isLoading)
     : null;
+  deleteAllModelInfoInCache();
 
   return {
     percent,
