@@ -10,9 +10,9 @@ const CodeEditor = ({
   editorRef = null,
   selectedLanguage,
   value,
-  onChange = ()=>{},
+  onChange = () => {},
   editable = false,
-  runCode = ()=>{},
+  runCode = () => {},
 }) => {
   const handleIndentTab = (cm) => {
     const spaces = Array(cm.getOption("indentUnit") + 1).join(" ");

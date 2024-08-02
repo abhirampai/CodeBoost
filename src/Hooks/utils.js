@@ -15,7 +15,7 @@ const initProgressCallback = (initProgress, start, end, isLoading) => {
   } else if (initProgress.progress) {
     isLoading.value = false;
   }
-}
+};
 
 const createWebWorker = async (startProgress, endProgress, isLoading) => {
   try {
@@ -29,7 +29,7 @@ const createWebWorker = async (startProgress, endProgress, isLoading) => {
         initProgressCallback: (progress) =>
           initProgressCallback(progress, startProgress, endProgress, isLoading),
         appConfig: WEBLLM_CONFIG,
-      }
+      },
     );
   } catch (e) {
     console.log(e);
@@ -51,7 +51,7 @@ export const createAppState = () => {
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
-    Math.floor((startProgress?.value / endProgress?.value) * 100)
+    Math.floor((startProgress?.value / endProgress?.value) * 100),
   );
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 

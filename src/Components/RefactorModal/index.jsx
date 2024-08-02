@@ -17,7 +17,7 @@ const RefactorModal = ({
 
   const extractCodeFromBlock = (blockString) =>
     [...blockString.matchAll(/```(?:[a-z]+)?\n([\s\S]+?)\n```/g)].map(
-      (match) => match[1]
+      (match) => match[1],
     );
 
   const pasteCode = () => {
