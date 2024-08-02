@@ -4,7 +4,7 @@
     "es2021": true,
   },
   "parser": "@babel/eslint-parser",
-  "extends": ["eslint:recommended", "plugin:react/jsx-runtime"],
+  "extends": ["react-app"],
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module",
@@ -13,6 +13,7 @@
     "process": "readonly",
   },
   "rules": {
+    "no-unused-vars": "warn",
     "sort-imports": [
       "error",
       {

@@ -1,8 +1,8 @@
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { defaultKeymap } from "@codemirror/commands";
 import { keymap } from "@codemirror/view";
 import { sublime } from "@uiw/codemirror-theme-sublime";
-import { defaultKeymap } from "@codemirror/commands";
-import { EditorView } from "@codemirror/view";
 
 import { mapLanguages } from "./utils";
 
