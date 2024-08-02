@@ -16,6 +16,7 @@ const initProgressCallback = (initProgress, start, end, isLoading) => {
 
 const createWebWorker = (startProgress, endProgress, isLoading) => {
   try {
+    deleteAllModelInfoInCache();
     return CreateWebWorkerMLCEngine(
       new Worker(new URL("../worker.js", import.meta.url), {
         type: "module",
@@ -54,7 +55,6 @@ export const createAppState = () => {
   const webLlmEngine = !isUnsupportedBrowser.value
     ? createWebWorker(startProgress, endProgress, isLoading)
     : null;
-  deleteAllModelInfoInCache();
 
   return {
     percent,
