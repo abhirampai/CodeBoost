@@ -1,8 +1,7 @@
 import { computed, signal } from "@preact/signals-react";
 import { createContext } from "react";
-import { CreateWebWorkerMLCEngine } from "@mlc-ai/web-llm";
-
-const selectedModel = "Phi-3-mini-4k-instruct-q4f16_1-MLC";
+import { CreateWebWorkerMLCEngine, deleteModelAllInfoInCache } from "@mlc-ai/web-llm";
+import { SELECTED_MODEL, WEBLLM_CONFIG } from "./constants";
 
 const initProgressCallback = (initProgress, start, end, isLoading) => {
   const progress = initProgress.text.match(/(\d+\/\d+)/g);
@@ -17,19 +16,25 @@ const initProgressCallback = (initProgress, start, end, isLoading) => {
 
 const createWebWorker = (startProgress, endProgress, isLoading) => {
   try {
+    deleteAllModelInfoInCache();
     return CreateWebWorkerMLCEngine(
       new Worker(new URL("../worker.js", import.meta.url), {
         type: "module",
       }),
-      selectedModel,
+      SELECTED_MODEL,
       {
         initProgressCallback: (progress) =>
           initProgressCallback(progress, startProgress, endProgress, isLoading),
+        appConfig: WEBLLM_CONFIG,
       }
     );
   } catch (e) {
     console.log(e);
   }
+};
+
+const deleteAllModelInfoInCache = async () => {
+  await deleteModelAllInfoInCache(SELECTED_MODEL);
 };
 
 export const createAppState = () => {
