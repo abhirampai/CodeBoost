@@ -18,7 +18,7 @@ const CodeActions = ({ runEditorCode, refactorCode, isLoading }) => {
       {!isUnsupportedBrowser.value && (
         <Tooltip
           title={
-            isModelLoading ? `Model is being loaded - ${percent.value}%` : ""
+            isModelLoading.value ? `Model is being loaded - ${percent.value}%` : ""
           }
           placement="topRight"
         >
