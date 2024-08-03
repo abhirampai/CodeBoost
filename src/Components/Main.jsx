@@ -120,6 +120,11 @@ const Main = ({ webLlmEngine }) => {
     }
   };
 
+  const scrollModalBody = () => {
+    const modalRef = document.querySelector(".ant-modal-body");
+    modalRef.scrollTop = modalRef.scrollHeight;
+  };
+
   const refactorCode = async () => {
     try {
       validateUserPrompt();
@@ -140,10 +145,11 @@ const Main = ({ webLlmEngine }) => {
       );
 
       engineOutput.value = "";
+      setIsLoading(false);
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
         engineOutput.value += reply;
-        setIsLoading(false);
+        scrollModalBody();
       }
       engineStreamLoading.value = false;
     } catch (err) {
