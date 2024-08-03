@@ -111,14 +111,19 @@ const Main = ({ webLlmEngine }) => {
       : value;
   };
 
+  const validateUserPrompt = () => {
+    if (!userPrompt.value.match("{source_code}")) {
+      messageApi.error(
+        "User prompt does not contain {source_code} string hence falling back to default user prompt",
+      );
+      userPrompt.value = DEFAULT_USER_PROMPT;
+    }
+  };
+
   const refactorCode = async () => {
     try {
-      if (!userPrompt.value.match("{source_code}")) {
-        messageApi.error(
-          "User prompt does not contain {source_code} string hence falling back to default user prompt",
-        );
-        userPrompt.value = DEFAULT_USER_PROMPT;
-      }
+      validateUserPrompt();
+
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
