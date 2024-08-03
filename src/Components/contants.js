@@ -19,3 +19,5 @@ export const DEFAULT_OUTPUT_VALUE = {
   data: "",
   status: "",
 };
+
+export const DEFAULT_USER_PROMPT = "Refactor code snippet {source_code}";
