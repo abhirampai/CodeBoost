@@ -36,7 +36,7 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
         <button className="inline-flex justify-center p-2 text-blue-600 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600">
           {isEngineStreamLoading.value ? (
             <Tooltip title="Stop generation">
-              <div class="w-6 h-6 flex flex-row items-center gap-2 justify-center bg-red-500 rounded-full shadow-lg hover:cursor-pointer hover:drop-shadow-xl hover:scale-105">
+              <div className="w-6 h-6 flex flex-row items-center gap-2 justify-center bg-red-500 rounded-full shadow-lg hover:cursor-pointer hover:drop-shadow-xl hover:scale-105">
                 <svg
                   stroke="currentColor"
                   fill="currentColor"
