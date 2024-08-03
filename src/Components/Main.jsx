@@ -2,8 +2,17 @@ import { useContext, useEffect, useRef, useState } from "react";
 
 import { assoc } from "ramda";
 
-import { DEFAULT_OUTPUT_VALUE, OUTPUT_STATUES } from "./contants";
-import { decodeString, encodeString, webLlmEngineInput } from "./utils";
+import {
+  DEFAULT_OUTPUT_VALUE,
+  DEFAULT_USER_PROMPT,
+  OUTPUT_STATUES,
+} from "./contants";
+import {
+  decodeString,
+  encodeString,
+  generateUserPrompt,
+  webLlmEngineInput,
+} from "./utils";
 import {
   useCreateSubmissionsApi,
   useGetSubmissionsApi,
@@ -21,13 +30,21 @@ import OutputTerminal from "./OutputTerminal";
 import OutputTerminalHeader from "./OutputTerminal/Header";
 import RefactorModal from "./RefactorModal";
 import UnsupportedBrowserCallout from "./UnsupportedBrowserCallout";
+import { message } from "antd";
 
 const Main = ({ webLlmEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
-  const { showWebLlmModal, engineOutput, engineStreamLoading } =
-    useContext(AppState);
+  const {
+    showWebLlmModal,
+    engineOutput,
+    engineStreamLoading,
+    userPrompt,
+    responseGenerationInterrupted,
+  } = useContext(AppState);
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [selectedLanguage, setSelectedLanguage] = useState(LANGUAGE_OPTIONS[0]);
   const [value, setValue] = useState(selectedLanguage?.stub);
@@ -94,11 +111,28 @@ const Main = ({ webLlmEngine }) => {
       : value;
   };
 
+  const validateUserPrompt = () => {
+    if (!userPrompt.value.match("{source_code}")) {
+      messageApi.error(
+        "User prompt does not contain {source_code} string hence falling back to default user prompt",
+      );
+      userPrompt.value = DEFAULT_USER_PROMPT;
+    }
+  };
+
+  const scrollModalBody = () => {
+    const modalRef = document.querySelector(".ant-modal-body");
+    modalRef.scrollTop = modalRef.scrollHeight;
+  };
+
   const refactorCode = async () => {
     try {
+      validateUserPrompt();
+
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
+      responseGenerationInterrupted.value = false;
       showWebLlmModal.value = true;
       engineStreamLoading.value = true;
       setIsLoading(true);
@@ -107,14 +141,15 @@ const Main = ({ webLlmEngine }) => {
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
-        webLlmEngineInput(selectedValue),
+        webLlmEngineInput(generateUserPrompt(userPrompt.value, selectedValue)),
       );
 
       engineOutput.value = "";
+      setIsLoading(false);
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
         engineOutput.value += reply;
-        setIsLoading(false);
+        scrollModalBody();
       }
       engineStreamLoading.value = false;
     } catch (err) {
@@ -128,6 +163,7 @@ const Main = ({ webLlmEngine }) => {
 
   return (
     <>
+      {contextHolder}
       <UnsupportedBrowserCallout />
       <div className="flex flex-col p-4">
         <Header />
