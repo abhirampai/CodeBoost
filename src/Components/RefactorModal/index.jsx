@@ -50,6 +50,7 @@ const RefactorModal = ({
       open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
+      styles={{ body: { overflowY: "auto", maxHeight: "calc(100vh - 350px)" } }}
       onCancel={handleCancel}
     >
       {isLoading ? (
