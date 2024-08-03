@@ -48,6 +48,7 @@ export const createAppState = () => {
   const engineOutput = signal("");
   const engineStreamLoading = signal(false);
   const isUnsupportedBrowser = signal(!navigator.gpu);
+  const userPrompt = signal("Refactor code snippet {source_code}");
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
@@ -60,14 +61,15 @@ export const createAppState = () => {
     : null;
 
   return {
-    percent,
-    isModelLoading,
-    webLlmEngine,
-    showWebLlmModal,
     engineOutput,
     engineStreamLoading,
+    isModelLoading,
     isEngineStreamLoading,
     isUnsupportedBrowser,
+    percent,
+    showWebLlmModal,
+    userPrompt,
+    webLlmEngine,
   };
 };
 

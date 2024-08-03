@@ -3,7 +3,12 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { assoc } from "ramda";
 
 import { DEFAULT_OUTPUT_VALUE, OUTPUT_STATUES } from "./contants";
-import { decodeString, encodeString, webLlmEngineInput } from "./utils";
+import {
+  decodeString,
+  encodeString,
+  generateUserPrompt,
+  webLlmEngineInput,
+} from "./utils";
 import {
   useCreateSubmissionsApi,
   useGetSubmissionsApi,
@@ -107,7 +112,7 @@ const Main = ({ webLlmEngine }) => {
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
-        webLlmEngineInput(selectedValue),
+        webLlmEngineInput(generateUserPrompt(selectedValue)),
       );
 
       engineOutput.value = "";
