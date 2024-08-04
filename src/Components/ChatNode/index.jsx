@@ -10,7 +10,7 @@ const ChatNode = ({ message }) => {
 
   return (
     <div class="flex flex-col">
-      <div class="bg-gray-200 flex-1 overflow-y-scroll">
+      <div class="flex-1 overflow-y-scroll">
         <div class="px-4 py-2">
           {isMessageInitiatorSystem ? (
             <>
@@ -19,7 +19,7 @@ const ChatNode = ({ message }) => {
                   icon={<img src={SystemAvatar} alt="System DP" />}
                   alt="System DP"
                 />
-                <div class="font-medium">Phi-3</div>
+                <div class="font-medium px-2">Phi-3</div>
               </div>
               <div class="bg-white rounded-lg p-2 shadow mb-2 max-w-prose">
                 <MDEditor.Markdown

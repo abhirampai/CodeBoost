@@ -45,11 +45,20 @@ const RefactorModal = ({
 
   return (
     <Modal
-      title="WebLLM Chat Modal"
+      title="WebLLM Chat"
       open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
-      styles={{ body: { overflowY: "auto", maxHeight: "calc(100vh - 350px)" } }}
+      styles={{
+        body: {
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 350px)",
+          backgroundColor: "rgb(229 231 235)",
+          borderRadius: "0.75rem",
+          boxShadow:
+            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        },
+      }}
       onCancel={handleCancel}
     >
       {isLoading ? (
