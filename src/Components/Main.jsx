@@ -132,6 +132,7 @@ const Main = ({ webLlmEngine }) => {
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
+      engineOutput.push({ initiator: "user", message: userPrompt.value });
       responseGenerationInterrupted.value = false;
       showWebLlmModal.value = true;
       engineStreamLoading.value = true;
@@ -144,11 +145,11 @@ const Main = ({ webLlmEngine }) => {
         webLlmEngineInput(generateUserPrompt(userPrompt.value, selectedValue)),
       );
 
-      engineOutput.value = "";
+      engineOutput.push({ initiator: "system", message: "" });
       setIsLoading(false);
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
-        engineOutput.value += reply;
+        engineOutput[engineOutput.length - 1].message += reply;
         scrollModalBody();
       }
       engineStreamLoading.value = false;

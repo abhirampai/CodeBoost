@@ -1,11 +1,10 @@
 import { useContext } from "react";
 
 import { Modal, Spin } from "antd";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import { AppState } from "../../Hooks/utils";
+import ChatNode from "../ChatNode";
 import UserPrompt from "../UserPrompt";
 
 const RefactorModal = ({
@@ -24,15 +23,15 @@ const RefactorModal = ({
 
   const pasteCode = () => {
     const selectedValue = getSelectedValue();
-    const code = extractCodeFromBlock(engineOutput.value);
+    const code = extractCodeFromBlock(
+      engineOutput[engineOutput.length - 1].message,
+    );
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
-    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
   const handleCancel = () => {
-    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
@@ -46,7 +45,7 @@ const RefactorModal = ({
 
   return (
     <Modal
-      title="WebLLM Phi-3 refactored code"
+      title="WebLLM Chat Modal"
       open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
@@ -58,13 +57,7 @@ const RefactorModal = ({
           <Spin />
         </div>
       ) : (
-        <MDEditor.Markdown
-          source={engineOutput.value}
-          style={{ padding: 10 }}
-          previewOptions={{
-            rehypePlugins: [[rehypeSanitize]],
-          }}
-        />
+        engineOutput.map((message) => <ChatNode message={message} />)
       )}
     </Modal>
   );

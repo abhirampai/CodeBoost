@@ -5,6 +5,7 @@ import {
 import { SELECTED_MODEL, WEBLLM_CONFIG } from "./constants";
 import { computed, signal } from "@preact/signals-react";
 import { createContext } from "react";
+import { observable } from "preact-observables";
 
 const initProgressCallback = (initProgress, start, end, isLoading) => {
   const progress = initProgress.text.match(/(\d+)\/\d+/);
@@ -45,7 +46,7 @@ export const createAppState = () => {
   const endProgress = signal(100);
   const isLoading = signal(true);
   const showWebLlmModal = signal(false);
-  const engineOutput = signal("");
+  const engineOutput = observable([]);
   const engineStreamLoading = signal(false);
   const isUnsupportedBrowser = signal(!navigator.gpu);
   const userPrompt = signal("Refactor code snippet {source_code}");
