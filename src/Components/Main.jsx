@@ -11,6 +11,7 @@ import {
   decodeString,
   encodeString,
   generateUserPrompt,
+  scrollModalBody,
   webLlmEngineInput,
 } from "./utils";
 import {
@@ -120,11 +121,6 @@ const Main = ({ webLlmEngine }) => {
     }
   };
 
-  const scrollModalBody = () => {
-    const modalRef = document.querySelector(".ant-modal-body");
-    modalRef.scrollTop = modalRef.scrollHeight;
-  };
-
   const refactorCode = async () => {
     try {
       validateUserPrompt();
@@ -132,6 +128,7 @@ const Main = ({ webLlmEngine }) => {
       const selectedValue = getSelectedRangeOfValue();
       if (!selectedValue && selectedValue === "") return;
 
+      engineOutput.push({ initiator: "user", message: userPrompt.value });
       responseGenerationInterrupted.value = false;
       showWebLlmModal.value = true;
       engineStreamLoading.value = true;
@@ -144,11 +141,11 @@ const Main = ({ webLlmEngine }) => {
         webLlmEngineInput(generateUserPrompt(userPrompt.value, selectedValue)),
       );
 
-      engineOutput.value = "";
+      engineOutput.push({ initiator: "system", message: "" });
       setIsLoading(false);
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
-        engineOutput.value += reply;
+        engineOutput[engineOutput.length - 1].message += reply;
         scrollModalBody();
       }
       engineStreamLoading.value = false;

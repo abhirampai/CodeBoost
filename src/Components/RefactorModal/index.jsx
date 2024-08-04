@@ -1,12 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
-import { Modal, Spin } from "antd";
-import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
+import { FloatButton, Modal, Spin } from "antd";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import { AppState } from "../../Hooks/utils";
+import ChatNode from "../ChatNode";
 import UserPrompt from "../UserPrompt";
+import { scrollModalBody } from "../utils";
 
 const RefactorModal = ({
   setValue,
@@ -24,15 +24,15 @@ const RefactorModal = ({
 
   const pasteCode = () => {
     const selectedValue = getSelectedValue();
-    const code = extractCodeFromBlock(engineOutput.value);
+    const code = extractCodeFromBlock(
+      engineOutput[engineOutput.length - 1].message,
+    );
 
     setValue((prevValue) => prevValue.replace(selectedValue, code));
-    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
   const handleCancel = () => {
-    engineOutput.value = "";
     showWebLlmModal.value = false;
   };
 
@@ -44,27 +44,41 @@ const RefactorModal = ({
     />,
   ];
 
+  useEffect(() => {
+    setTimeout(() => scrollModalBody(), 100);
+  }, []);
+
   return (
     <Modal
-      title="WebLLM Phi-3 refactored code"
+      title="WebLLM Chat"
       open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
-      styles={{ body: { overflowY: "auto", maxHeight: "calc(100vh - 350px)" } }}
+      styles={{
+        body: {
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 350px)",
+          backgroundColor: "rgb(229 231 235)",
+          borderRadius: "0.75rem",
+          boxShadow:
+            "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        },
+      }}
       onCancel={handleCancel}
     >
+      <FloatButton.BackTop
+        target={() => document.querySelector(".ant-modal-body")}
+        visibilityHeight={10}
+        tooltip="Scroll to top of the chat"
+      />
       {isLoading ? (
         <div className="flex w-full h-full justify-center">
           <Spin />
         </div>
       ) : (
-        <MDEditor.Markdown
-          source={engineOutput.value}
-          style={{ padding: 10 }}
-          previewOptions={{
-            rehypePlugins: [[rehypeSanitize]],
-          }}
-        />
+        engineOutput.map((message) => (
+          <ChatNode key={`message-${message.initiator}-v${Math.random()}`} message={message} />
+        ))
       )}
     </Modal>
   );
