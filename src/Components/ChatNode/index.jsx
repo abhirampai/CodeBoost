@@ -1,5 +1,9 @@
+import { Avatar } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
+
+import SystemAvatar from "../../Images/system_avatar.svg";
+import UserAvatar from "../../Images/user_avatar.svg";
 
 const ChatNode = ({ message }) => {
   const isMessageInitiatorSystem = message.initiator === "system";
@@ -11,10 +15,9 @@ const ChatNode = ({ message }) => {
           {isMessageInitiatorSystem ? (
             <>
               <div class="flex items-center mb-2">
-                <img
-                  class="w-8 h-8 rounded-full mr-2"
-                  src="https://picsum.photos/50/50"
-                  alt="User Avatar"
+                <Avatar
+                  icon={<img src={SystemAvatar} alt="System DP" />}
+                  alt="System DP"
                 />
                 <div class="font-medium">Phi-3</div>
               </div>
@@ -33,10 +36,9 @@ const ChatNode = ({ message }) => {
               <div class="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-prose">
                 {message.message}
               </div>
-              <img
-                class="w-8 h-8 rounded-full"
-                src="https://picsum.photos/50/50"
-                alt="User Avatar"
+              <Avatar
+                icon={<img src={UserAvatar} alt="User DP" />}
+                alt="User DP"
               />
             </div>
           )}
