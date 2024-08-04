@@ -11,6 +11,7 @@ import {
   decodeString,
   encodeString,
   generateUserPrompt,
+  scrollModalBody,
   webLlmEngineInput,
 } from "./utils";
 import {
@@ -118,11 +119,6 @@ const Main = ({ webLlmEngine }) => {
       );
       userPrompt.value = DEFAULT_USER_PROMPT;
     }
-  };
-
-  const scrollModalBody = () => {
-    const modalRef = document.querySelector(".ant-modal-body");
-    modalRef.scrollTop = modalRef.scrollHeight;
   };
 
   const refactorCode = async () => {

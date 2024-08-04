@@ -20,3 +20,8 @@ export const webLlmEngineInput = (userPrompt) => ({
 
 export const generateUserPrompt = (userPrompt, code) =>
   userPrompt.replace("{source_code}", code);
+
+export const scrollModalBody = () => {
+  const modalRef = document.querySelector(".ant-modal-body");
+  if (modalRef) modalRef.scrollTop = modalRef.scrollHeight;
+};

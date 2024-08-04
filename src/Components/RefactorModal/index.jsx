@@ -1,11 +1,12 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
-import { Modal, Spin } from "antd";
+import { FloatButton, Modal, Spin } from "antd";
 import { useSignals } from "@preact/signals-react/runtime";
 
 import { AppState } from "../../Hooks/utils";
 import ChatNode from "../ChatNode";
 import UserPrompt from "../UserPrompt";
+import { scrollModalBody } from "../utils";
 
 const RefactorModal = ({
   setValue,
@@ -43,6 +44,10 @@ const RefactorModal = ({
     />,
   ];
 
+  useEffect(() => {
+    setTimeout(() => scrollModalBody(), 100);
+  }, []);
+
   return (
     <Modal
       title="WebLLM Chat"
@@ -61,6 +66,11 @@ const RefactorModal = ({
       }}
       onCancel={handleCancel}
     >
+      <FloatButton.BackTop
+        target={() => document.querySelector(".ant-modal-body")}
+        visibilityHeight={10}
+        tooltip="Scroll to top of the chat"
+      />
       {isLoading ? (
         <div className="flex w-full h-full justify-center">
           <Spin />
