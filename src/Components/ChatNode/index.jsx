@@ -9,19 +9,19 @@ const ChatNode = ({ message }) => {
   const isMessageInitiatorSystem = message.initiator === "system";
 
   return (
-    <div class="flex flex-col">
-      <div class="flex-1 overflow-y-scroll">
-        <div class="px-4 py-2">
+    <div className="flex flex-col">
+      <div className="flex-1 overflow-y-scroll">
+        <div className="px-4 py-2">
           {isMessageInitiatorSystem ? (
             <>
-              <div class="flex items-center mb-2">
+              <div className="flex items-center mb-2">
                 <Avatar
                   icon={<img src={SystemAvatar} alt="System DP" />}
                   alt="System DP"
                 />
-                <div class="font-medium px-2">Phi-3</div>
+                <div className="font-medium px-2">Phi-3</div>
               </div>
-              <div class="bg-white rounded-lg p-2 shadow mb-2 max-w-prose">
+              <div className="bg-white rounded-lg p-2 shadow mb-2 max-w-prose">
                 <MDEditor.Markdown
                   source={message.message}
                   style={{ padding: 10 }}
@@ -32,8 +32,8 @@ const ChatNode = ({ message }) => {
               </div>
             </>
           ) : (
-            <div class="flex items-center justify-end">
-              <div class="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-prose">
+            <div className="flex items-center justify-end">
+              <div className="bg-blue-500 text-white rounded-lg p-2 shadow mr-2 max-w-prose">
                 {message.message}
               </div>
               <Avatar

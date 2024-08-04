@@ -76,7 +76,9 @@ const RefactorModal = ({
           <Spin />
         </div>
       ) : (
-        engineOutput.map((message) => <ChatNode message={message} />)
+        engineOutput.map((message) => (
+          <ChatNode key={`message-${message.initiator}-v${Math.random()}`} message={message} />
+        ))
       )}
     </Modal>
   );
