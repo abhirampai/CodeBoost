@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { Tooltip, message } from "antd";
+import { Popconfirm, Tooltip, message } from "antd";
 import { AppState } from "../../Hooks/utils";
 
 const UserPrompt = ({ pasteCode, regenerateResponse }) => {
@@ -10,6 +10,7 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
     engineStreamLoading,
     webLlmEngine,
     responseGenerationInterrupted,
+    engineOutput,
   } = useContext(AppState);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -20,6 +21,10 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
     engine.interruptGenerate();
     engineStreamLoading.value = false;
     responseGenerationInterrupted.value = true;
+  };
+
+  const clearChatHistory = () => {
+    engineOutput.length = 0;
   };
 
   return (
@@ -88,6 +93,28 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
               </button>
             </Tooltip>
           )}
+        {!isEngineStreamLoading.value && (
+          <Popconfirm
+            title="Clear chat history"
+            description="Are you sure to clear this chat?"
+            onConfirm={clearChatHistory}
+            okText="Sure"
+          >
+            <button className="inline-flex justify-center p-2 text-blue-600 bg-red-500 rounded-full cursor-pointer hover:bg-red-600 hover:scale-105 hover:drop-shadow-xl">
+              <svg
+                className="text-slate-200 hover:scale-125"
+                fillRule="evenodd"
+                viewBox="64 64 896 896"
+                width="1em"
+                height="1em"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M799.86 166.31c.02 0 .04.02.08.06l57.69 57.7c.04.03.05.05.06.08a.12.12 0 010 .06c0 .03-.02.05-.06.09L569.93 512l287.7 287.7c.04.04.05.06.06.09a.12.12 0 010 .07c0 .02-.02.04-.06.08l-57.7 57.69c-.03.04-.05.05-.07.06a.12.12 0 01-.07 0c-.03 0-.05-.02-.09-.06L512 569.93l-287.7 287.7c-.04.04-.06.05-.09.06a.12.12 0 01-.07 0c-.02 0-.04-.02-.08-.06l-57.69-57.7c-.04-.03-.05-.05-.06-.07a.12.12 0 010-.07c0-.03.02-.05.06-.09L454.07 512l-287.7-287.7c-.04-.04-.05-.06-.06-.09a.12.12 0 010-.07c0-.02.02-.04.06-.08l57.7-57.69c.03-.04.05-.05.07-.06a.12.12 0 01.07 0c.03 0 .05.02.09.06L512 454.07l287.7-287.7c.04-.04.06-.05.09-.06a.12.12 0 01.07 0z"></path>
+              </svg>
+            </button>
+          </Popconfirm>
+        )}
       </div>
     </>
   );
