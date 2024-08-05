@@ -26,7 +26,7 @@ const UnsupportedBrowserCallout = () => {
             &nbsp;for more info.
             <br /> We are using Google Gemini for unsupported browsers which is
             free but don't share sensitive info since google might use it to
-            improve the model
+            improve the model.
           </>
         }
       />

@@ -49,11 +49,11 @@ const deleteAllModelInfoInCache = async () => {
 export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
-  const isLoading = signal(false);
   const showWebLlmModal = signal(false);
   const engineOutput = observable([]);
   const engineStreamLoading = signal(false);
   const isUnsupportedBrowser = signal(!navigator.gpu);
+  const isLoading = signal(!isUnsupportedBrowser.value ? true : false);
   const userPrompt = signal("Refactor code snippet {source_code}");
   const responseGenerationInterrupted = signal(false);
   const userPromptInterval = signal(null); // handle interruption for google gemini
