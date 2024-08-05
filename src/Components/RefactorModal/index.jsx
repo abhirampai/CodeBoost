@@ -58,6 +58,7 @@ const RefactorModal = ({
         body: {
           overflowY: "auto",
           maxHeight: "calc(100vh - 350px)",
+          minHeight: "50px",
           backgroundColor: "rgb(229 231 235)",
           borderRadius: "0.75rem",
           boxShadow:
@@ -72,7 +73,7 @@ const RefactorModal = ({
         tooltip="Scroll to top of the chat"
       />
       {isLoading ? (
-        <div className="flex w-full h-full justify-center">
+        <div className="flex w-full h-12 justify-center items-center">
           <Spin />
         </div>
       ) : (
