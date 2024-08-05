@@ -27,7 +27,10 @@ https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-
 # APIs
 
 - Judge0CE
+
+# Packages
 - [web-llm](https://github.com/mlc-ai/web-llm) with Phi 3 model
+- [@google/generative-ai](github.com/google/generative-ai-js) with gemini-1.5-flash
 
 # Contributing
 
