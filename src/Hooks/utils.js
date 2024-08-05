@@ -2,8 +2,13 @@ import {
   CreateWebWorkerMLCEngine,
   deleteModelAllInfoInCache,
 } from "@mlc-ai/web-llm";
-import { SELECTED_MODEL, WEBLLM_CONFIG } from "./constants";
+import {
+  SELECTED_GEMINI_MODEL,
+  SELECTED_MODEL,
+  WEBLLM_CONFIG,
+} from "./constants";
 import { computed, signal } from "@preact/signals-react";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createContext } from "react";
 import { observable } from "preact-observables";
 
@@ -44,13 +49,14 @@ const deleteAllModelInfoInCache = async () => {
 export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
-  const isLoading = signal(true);
+  const isLoading = signal(false);
   const showWebLlmModal = signal(false);
   const engineOutput = observable([]);
   const engineStreamLoading = signal(false);
   const isUnsupportedBrowser = signal(!navigator.gpu);
   const userPrompt = signal("Refactor code snippet {source_code}");
   const responseGenerationInterrupted = signal(false);
+  const userPromptInterval = signal(null); // handle interruption for google gemini
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
@@ -58,9 +64,13 @@ export const createAppState = () => {
   );
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
-  const webLlmEngine = !isUnsupportedBrowser.value
+  const aiEngine = !isUnsupportedBrowser.value
     ? createWebWorker(startProgress, endProgress, isLoading)
-    : null;
+    : new GoogleGenerativeAI(
+        process.env.REACT_APP_GOOGLE_GEMINI_API_KEY,
+      ).getGenerativeModel({ model: SELECTED_GEMINI_MODEL });
+
+  const isGeminiEngine = isUnsupportedBrowser.value;
 
   return {
     engineOutput,
@@ -72,7 +82,9 @@ export const createAppState = () => {
     responseGenerationInterrupted,
     showWebLlmModal,
     userPrompt,
-    webLlmEngine,
+    aiEngine,
+    isGeminiEngine,
+    userPromptInterval,
   };
 };
 

@@ -33,7 +33,7 @@ import RefactorModal from "./RefactorModal";
 import UnsupportedBrowserCallout from "./UnsupportedBrowserCallout";
 import { message } from "antd";
 
-const Main = ({ webLlmEngine }) => {
+const Main = ({ aiEngine }) => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -43,6 +43,8 @@ const Main = ({ webLlmEngine }) => {
     engineStreamLoading,
     userPrompt,
     responseGenerationInterrupted,
+    isGeminiEngine,
+    userPromptInterval,
   } = useContext(AppState);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -134,7 +136,8 @@ const Main = ({ webLlmEngine }) => {
       engineStreamLoading.value = true;
       setIsLoading(true);
 
-      const engine = await webLlmEngine;
+      if (isGeminiEngine) return geminiFlow(selectedValue);
+      const engine = await aiEngine;
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
@@ -152,6 +155,24 @@ const Main = ({ webLlmEngine }) => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const geminiFlow = async (selectedValue) => {
+    const prompt = `You are a chatbot that can refactor any code.
+        Always return the code block in markdown style with comments about the refactored code.
+        Always suggest the output in the requested language itself with a single code block.\n ${generateUserPrompt(userPrompt.value, selectedValue)}`;
+    const result = await aiEngine.generateContentStream(prompt);
+    setIsLoading(false);
+
+    engineOutput.push({ initiator: "system", message: "" });
+    userPromptInterval.val = setInterval(async () => {
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text() || "";
+        engineOutput[engineOutput.length - 1].message += chunkText;
+        scrollModalBody();
+      }
+    });
+    engineStreamLoading.value = false;
   };
 
   const clearOutput = () => {

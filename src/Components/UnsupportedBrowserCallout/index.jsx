@@ -14,8 +14,8 @@ const UnsupportedBrowserCallout = () => {
         banner
         message={
           <>
-            Your browser currently doesn't support the refactor code feature.
-            Please check&nbsp;
+            Your browser currently doesn't support the webGPU. Please
+            check&nbsp;
             <Link
               href="https://caniuse.com/?search=WebGPU"
               referrerPolicy="no-referer"
@@ -24,6 +24,9 @@ const UnsupportedBrowserCallout = () => {
               supported browsers
             </Link>
             &nbsp;for more info.
+            <br /> We are using Google Gemini for unsupported browsers which is
+            free but don't share sensitive info since google might use it to
+            improve the model
           </>
         }
       />

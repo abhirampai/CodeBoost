@@ -8,19 +8,30 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
     userPrompt,
     isEngineStreamLoading,
     engineStreamLoading,
-    webLlmEngine,
+    aiEngine,
     responseGenerationInterrupted,
     engineOutput,
+    isGeminiEngine,
+    userPromptInterval,
   } = useContext(AppState);
 
   const [messageApi, contextHolder] = message.useMessage();
 
   const stopEngineResponseGeneration = async () => {
     messageApi.info("Stopping response generation");
-    const engine = await webLlmEngine;
-    engine.interruptGenerate();
+
+    if (isGeminiEngine) {
+      stopGeminiEngineResponse();
+    } else {
+      const engine = await aiEngine;
+      engine.interruptGenerate();
+    }
     engineStreamLoading.value = false;
     responseGenerationInterrupted.value = true;
+  };
+
+  const stopGeminiEngineResponse = () => {
+    if (userPromptInterval.val) clearInterval(userPromptInterval.val);
   };
 
   const clearChatHistory = () => {

@@ -11,6 +11,7 @@
     "@codemirror/lang-python": "6.0.0",
     "@codemirror/lang-rust": "6.0.0",
     "@codemirror/legacy-modes": "6.1.0",
+    "@google/generative-ai": "^0.16.0",
     "@mlc-ai/web-llm": "^0.2.51",
     "@preact/signals-react": "^2.1.0",
     "@replit/codemirror-lang-csharp": "^6.2.0",
