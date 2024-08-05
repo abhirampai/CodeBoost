@@ -15,11 +15,11 @@ const queryClient = new QueryClient();
 
 export default function App() {
   useSignals();
-  const { webLlmEngine } = useContext(AppState);
+  const { aiEngine } = useContext(AppState);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Main webLlmEngine={webLlmEngine} />
+      <Main aiEngine={aiEngine} />
       <Analytics mode="production" />
       <SpeedInsights />
     </QueryClientProvider>

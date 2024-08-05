@@ -50,7 +50,7 @@ const RefactorModal = ({
 
   return (
     <Modal
-      title="WebLLM Chat"
+      title="Refactor chat"
       open={showWebLlmModal.value}
       footer={!isLoading ? Footer : null}
       width={1000}
@@ -77,7 +77,10 @@ const RefactorModal = ({
         </div>
       ) : (
         engineOutput.map((message) => (
-          <ChatNode key={`message-${message.initiator}-v${Math.random()}`} message={message} />
+          <ChatNode
+            key={`message-${message.initiator}-v${Math.random()}`}
+            message={message}
+          />
         ))
       )}
     </Modal>
