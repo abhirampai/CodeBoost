@@ -33,7 +33,7 @@ import RefactorModal from "./RefactorModal";
 import UnsupportedBrowserCallout from "./UnsupportedBrowserCallout";
 import { message } from "antd";
 
-const Main = ({ aiEngine }) => {
+const Main = () => {
   const outputRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -45,6 +45,7 @@ const Main = ({ aiEngine }) => {
     responseGenerationInterrupted,
     isGeminiEngine,
     userPromptInterval,
+    aiEngine,
   } = useContext(AppState);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -134,18 +135,16 @@ const Main = ({ aiEngine }) => {
       responseGenerationInterrupted.value = false;
       showWebLlmModal.value = true;
       engineStreamLoading.value = true;
-      setIsLoading(true);
 
-      if (isGeminiEngine) return geminiFlow(selectedValue);
-      const engine = await aiEngine;
+      if (isGeminiEngine.value) return geminiFlow(selectedValue);
+      const engine = await aiEngine.value;
 
       engine.interruptGenerate();
       const webLlmOutput = await engine.chat.completions.create(
         webLlmEngineInput(generateUserPrompt(userPrompt.value, selectedValue)),
       );
 
-      engineOutput.push({ initiator: "system", message: "" });
-      setIsLoading(false);
+      engineOutput.push({ initiator: "system", message: "", modelName: "Phi-3" });
       for await (const chunk of webLlmOutput) {
         const reply = chunk.choices[0]?.delta.content || "";
         engineOutput[engineOutput.length - 1].message += reply;
@@ -161,10 +160,9 @@ const Main = ({ aiEngine }) => {
     const prompt = `You are a chatbot that can refactor any code.
         Always return the code block in markdown style with comments about the refactored code.
         Always suggest the output in the requested language itself with a single code block.\n ${generateUserPrompt(userPrompt.value, selectedValue)}`;
-    const result = await aiEngine.generateContentStream(prompt);
-    setIsLoading(false);
+    const result = await aiEngine.value.generateContentStream(prompt);
 
-    engineOutput.push({ initiator: "system", message: "" });
+    engineOutput.push({ initiator: "system", message: "", modelName: "Gemini" });
     userPromptInterval.val = setInterval(async () => {
       for await (const chunk of result.stream) {
         const chunkText = chunk.text() || "";

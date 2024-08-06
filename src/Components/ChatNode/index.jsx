@@ -1,14 +1,11 @@
 import { Avatar } from "antd";
 import MDEditor from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
-import { useContext } from "react";
 
-import { AppState } from "../../Hooks/utils";
 import SystemAvatar from "../../Images/system_avatar.svg";
 import UserAvatar from "../../Images/user_avatar.svg";
 
 const ChatNode = ({ message }) => {
-  const { isGeminiEngine } = useContext(AppState);
   const isMessageInitiatorSystem = message.initiator === "system";
 
   return (
@@ -22,9 +19,7 @@ const ChatNode = ({ message }) => {
                   icon={<img src={SystemAvatar} alt="System DP" />}
                   alt="System DP"
                 />
-                <div className="font-medium px-2">
-                  {isGeminiEngine ? "Gemini" : "Phi - 3"}
-                </div>
+                <div className="font-medium px-2">{message.modelName}</div>
               </div>
               <div className="bg-white rounded-lg p-2 shadow mb-2 max-w-prose">
                 <MDEditor.Markdown

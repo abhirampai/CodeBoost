@@ -46,6 +46,33 @@ const deleteAllModelInfoInCache = async () => {
   await deleteModelAllInfoInCache(SELECTED_MODEL);
 };
 
+const getEngineFromLocalStorage = (
+  selectedModelInLocalStorage,
+  startProgress,
+  endProgress,
+  isLoading,
+) => {
+  if (selectedModelInLocalStorage) {
+    return selectedModelInLocalStorage === "googleGemini"
+      ? initializeGoogleGeminiEngine()
+      : initializeWebLlmEngine(startProgress, endProgress, isLoading);
+  }
+};
+
+export const initializeWebLlmEngine = (
+  startProgress,
+  endProgress,
+  isLoading,
+) => {
+  isLoading.value = true;
+  return createWebWorker(startProgress, endProgress, isLoading);
+};
+
+export const initializeGoogleGeminiEngine = () =>
+  new GoogleGenerativeAI(
+    process.env.REACT_APP_GOOGLE_GEMINI_API_KEY,
+  ).getGenerativeModel({ model: SELECTED_GEMINI_MODEL });
+
 export const createAppState = () => {
   const startProgress = signal(0);
   const endProgress = signal(100);
@@ -53,10 +80,28 @@ export const createAppState = () => {
   const engineOutput = observable([]);
   const engineStreamLoading = signal(false);
   const isUnsupportedBrowser = signal(!navigator.gpu);
-  const isLoading = signal(!isUnsupportedBrowser.value ? true : false);
+  const isLoading = signal(false);
   const userPrompt = signal("Refactor code snippet {source_code}");
   const responseGenerationInterrupted = signal(false);
   const userPromptInterval = signal(null); // handle interruption for google gemini
+  const selectedModelInLocalStorage = signal(
+    localStorage.getItem("selectedModel"),
+  );
+  const showModalSelection = signal(
+    !selectedModelInLocalStorage.value && navigator.gpu ? true : false,
+  );
+  const aiEngine = signal(
+    isUnsupportedBrowser.value
+      ? new GoogleGenerativeAI(
+          process.env.REACT_APP_GOOGLE_GEMINI_API_KEY,
+        ).getGenerativeModel({ model: SELECTED_GEMINI_MODEL })
+      : getEngineFromLocalStorage(
+          selectedModelInLocalStorage.value,
+          startProgress,
+          endProgress,
+          isLoading,
+        ),
+  );
 
   const isModelLoading = computed(() => isLoading.value);
   const percent = computed(() =>
@@ -64,15 +109,16 @@ export const createAppState = () => {
   );
   const isEngineStreamLoading = computed(() => engineStreamLoading.value);
 
-  const aiEngine = !isUnsupportedBrowser.value
-    ? createWebWorker(startProgress, endProgress, isLoading)
-    : new GoogleGenerativeAI(
-        process.env.REACT_APP_GOOGLE_GEMINI_API_KEY,
-      ).getGenerativeModel({ model: SELECTED_GEMINI_MODEL });
-
-  const isGeminiEngine = isUnsupportedBrowser.value;
+  const isGeminiEngine = computed(
+    () =>
+      isUnsupportedBrowser.value ||
+      selectedModelInLocalStorage.value === "googleGemini",
+  );
 
   return {
+    startProgress,
+    endProgress,
+    isLoading,
     engineOutput,
     engineStreamLoading,
     isModelLoading,
@@ -85,6 +131,8 @@ export const createAppState = () => {
     aiEngine,
     isGeminiEngine,
     userPromptInterval,
+    showModalSelection,
+    selectedModelInLocalStorage,
   };
 };
 
