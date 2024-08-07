@@ -14,18 +14,24 @@ https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-
 # Features
 
 - <b>Select AI model for refactoring:</b> CodeBoost allows the user to select the model they want to use for refactoring the code, provided the browser supports webGPU. Else CodeBoost uses google gemini by default.
-  Selection Using the modal selection modal
+  
+  #### Selection Using the modal selection modal
   ![select model using selection modal](https://github.com/user-attachments/assets/8c536f0d-2bce-4f25-8044-c28cf2174649)
-  Selection using the radio button in user prompt
+
+
+  #### Selection using the radio button in user prompt
   <img width="1001" alt="selection using the radio button in user prompt" src="https://github.com/user-attachments/assets/3a2c5791-93ac-4765-9ca5-d2b98a68846c">
 
 - <b>Code refactoring:</b> CodeBoost makes it easy to refactor your code by suggesting changes that will improve its quality, readability, and performance. You can choose to refactor the whole code or part of code by selecting the code snippet and refactor that part.
+
   https://github.com/user-attachments/assets/5779467c-7390-47a0-88bd-668aa6b913bd
 
 - <b>User prompt</b> Users can use the user prompt to modify the user prompt and the regenerate the response, the only constraint is that the user needs to mention {source_code} variable in the prompt for the response to be generated.
+
   <img width="994" alt="user prompt" src="https://github.com/user-attachments/assets/4c0c3d70-49c5-46ad-b908-c6e256a1eeb1">
 
 - <b>Code running</b>: CodeBoost allows you to run your code directly from the editor, without having to switch to a different tool or environment. You can run your code as many times as you like, with different input values, and see the output and any errors or exceptions that occur.
+
   https://github.com/user-attachments/assets/ff5a754b-b65e-42fc-9d9f-201217155d73
 
 
