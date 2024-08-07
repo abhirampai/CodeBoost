@@ -5,6 +5,10 @@ CodeBoost is a code runner that allows you to refactor and run your code in one 
 
 # Demo
 
+### Updated Demo
+[![Update demo for CodeBoost](http://img.youtube.com/vi/DlRiWdby3EE/0.jpg)](https://youtu.be/DlRiWdby3EE)
+
+### Old Demo
 https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-80c9-2ea92fbcc5f9.mp4
 
 # Features
