@@ -134,7 +134,7 @@ const UserPrompt = ({ pasteCode, regenerateResponse }) => {
         </div>
         {!isUnsupportedBrowser.value && <ModelSelector />}
         {isGeminiEngine.value && (
-          <p className="font-bold text-slate-200">
+          <p className="font-bold dark:text-slate-200 text-gray-400">
             Google Gemini is free but don't share sensitive info since google
             might use it to improve the model.
           </p>
