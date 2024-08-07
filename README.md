@@ -16,7 +16,11 @@ https://user-images.githubusercontent.com/36255896/228125452-a45c4924-6849-49a5-
   <img width="1001" alt="selection using the radio button in user prompt" src="https://github.com/user-attachments/assets/3a2c5791-93ac-4765-9ca5-d2b98a68846c">
 
 - <b>Code refactoring:</b> CodeBoost makes it easy to refactor your code by suggesting changes that will improve its quality, readability, and performance. You can choose to refactor the whole code or part of code by selecting the code snippet and refactor that part.
+  https://github.com/user-attachments/assets/5779467c-7390-47a0-88bd-668aa6b913bd
+  
 - <b>Code running</b>: CodeBoost allows you to run your code directly from the editor, without having to switch to a different tool or environment. You can run your code as many times as you like, with different input values, and see the output and any errors or exceptions that occur.
+  https://github.com/user-attachments/assets/ff5a754b-b65e-42fc-9d9f-201217155d73
+
 
 # Languages supported
 
